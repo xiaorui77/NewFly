@@ -8,6 +8,10 @@
 * Redis mysql
 
 
+## 说明
+使用maven管理, java8环境
+coder文件夹是我自己做的一个备份, 没有任何影响, 可以忽略
+
 
 ## 数据格式(目前使用字符串形式)
 length type content

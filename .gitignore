@@ -1,4 +1,6 @@
 # ignore target files
-.idea
-.settings
+.idea/
+.settings/
+target/
 .project
+

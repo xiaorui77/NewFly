@@ -1,17 +1,19 @@
 package com.newfly.service;
 
+import com.newfly.common.ConstantDefine;
+import com.newfly.common.SocketChannelMap;
 import com.newfly.dao.ChannelRedis;
-import com.newfly.mapper.PlayerMapper;
 import com.newfly.dao.PlayerRedis;
+import com.newfly.mapper.PlayerMapper;
 import com.newfly.pojo.Message;
 import com.newfly.pojo.Player;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.socket.SocketChannel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
-
 @Service
-public class PlayerService
+public class LoginService
 {
     @Autowired
     PlayerMapper playerMapper;
@@ -35,7 +37,7 @@ public class PlayerService
 
 
     // 玩家登录
-    public Message login(Message msg) {
+    public Message login(ChannelHandlerContext ctx, Message msg) {
         // 查询mysql数据库
         String[] strings = msg.getBody().split(":");
         String name = strings[0];
@@ -46,9 +48,11 @@ public class PlayerService
         if (player == null) {
             return null;
         }
-        // 存入redis
-        playerRedis.hsetPlayer(player);
-        return new Message(3102, player.toString());
+        // 保存该用户的channel
+        SocketChannelMap.add(String.valueOf(player.getId()), (SocketChannel) ctx.channel());
+        // 将用户信息存入redis
+        playerRedis.savePlayer(player);
+        return new Message(ConstantDefine.MESSAGE_PLAYER_LOGIN_RETURN, player.toString());
     }
 
     // 玩家退出
@@ -57,33 +61,9 @@ public class PlayerService
         int id = Integer.parseInt(msg.getBody());
 
         // 删除redis相关字段
-        playerRedis.hdelPlayer(id);
+        playerRedis.removePlayer(id);
         return null;
     }
 
-    // 频道聊天
-    public Message chatPublic(Message msg) {
-        String[] strings = msg.getBody().split(":");
-        int id = Integer.parseInt(strings[0]);
-        int channelId = Integer.parseInt(strings[0]);
-        String message = strings[2];
-
-        // 是否有该频道并广播
-        Set<String> channelMember = channelRedis.existChannel();
-        for (String channel : channelMember) {
-
-        }
-        return null;
-    }
-
-
-    public Message chat(Message msg) {
-        String[] strings = msg.getBody().split(":");
-        int id = Integer.parseInt(strings[0]);
-        int targetId = Integer.parseInt(strings[0]);
-        String message = strings[2];
-
-        return null;
-    }
 
 }// end

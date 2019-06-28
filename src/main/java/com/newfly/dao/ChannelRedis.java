@@ -15,9 +15,16 @@ public class ChannelRedis
     private JedisPool jedisPool;
 
 
-    public Set<String> existChannel() {
+    // 查询某个频道的成员
+    public Set<String> channelMember(int channelId) {
         Jedis jedis = jedisPool.getResource();
         return jedis.smembers("chatChannel");
+    }
+
+    // 是否存在某个频道
+    public boolean existChannel(int channel) {
+        Jedis jedis = jedisPool.getResource();
+        return jedis.sismember("chatChannel", String.valueOf(channel));
     }
 
 }// end

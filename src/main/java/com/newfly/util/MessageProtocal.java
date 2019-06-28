@@ -1,7 +1,5 @@
 package com.newfly.util;
 
-import com.sun.org.apache.bcel.internal.classfile.ConstantValue;
-
 import java.util.Arrays;
 
 public class MessageProtocal

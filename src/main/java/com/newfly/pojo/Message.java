@@ -1,48 +1,70 @@
 package com.newfly.pojo;
 
+import java.sql.Timestamp;
+
 public class Message
 {
-    private short length;
-    private short type;
+    private int id;
+    private int from;
+    private int target;
+    private String title;
     private String body;
-
+    Timestamp create_time;
 
     public Message() {
     }
 
-    public Message(int type, String body) {
-        this.type = (short) type;
+    public Message(int from, int target, String body) {
+        this.from = from;
+        this.target = target;
         this.body = body;
     }
 
-    public Message(int length, int type, String body) {
-        this.length = (short) length;
-        this.type = (short) type;
-        this.body = body;
+    public int getId() {
+        return id;
     }
 
-    public short getLength() {
-        return this.length;
+    public int getFrom() {
+        return from;
     }
 
-    public short getType() {
-        return this.type;
+    public int getTarget() {
+        return target;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public String getBody() {
-        return this.body;
+        return body;
     }
 
-    public void setLength(int length) {
-        this.length = (short) length;
+    public Timestamp getCreate_time() {
+        return create_time;
     }
 
-    public void setType(int type) {
-        this.type = (short) type;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setFrom(int from) {
+        this.from = from;
+    }
+
+    public void setTarget(int target) {
+        this.target = target;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setBody(String body) {
         this.body = body;
     }
 
+    public void setCreate_time(Timestamp create_time) {
+        this.create_time = create_time;
+    }
 }

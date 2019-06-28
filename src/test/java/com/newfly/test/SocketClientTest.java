@@ -3,13 +3,16 @@ package com.newfly.test;
 
 import com.newfly.common.LengthFieldMessageDecoder;
 import com.newfly.common.LengthFieldMessageEncoder;
-import com.newfly.pojo.Message;
+import com.newfly.pojo.ResultMessage;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 
 public class SocketClientTest
@@ -47,12 +50,17 @@ public class SocketClientTest
         // 连接服务端
         ChannelFuture channelFuture = bootstrap.connect(IP, PORT).sync();
 
-        String m = "xiongda:123456";
-        Message msg = new Message(0, 2101, m);
-
-        channelFuture.channel().writeAndFlush(msg);
-        logger.info("已向Socket服务器发送数据:" + msg);
-
+        // 模拟发包
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int type = 1000;
+        String m;
+        while (type > 0) {
+            type = Integer.parseInt(br.readLine());
+            m = br.readLine();
+            ResultMessage msg = new ResultMessage(0, type, m);
+            channelFuture.channel().writeAndFlush(msg);
+            logger.info("已向Socket服务器发送数据:" + msg);
+        }
         channelFuture.channel().closeFuture().sync();
 
     }

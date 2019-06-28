@@ -2,67 +2,102 @@ package com.newfly.service;
 
 import com.newfly.common.ConstantDefine;
 import com.newfly.common.SocketChannelMap;
-import com.newfly.dao.ChannelRedis;
+import com.newfly.dao.MapSceneRedis;
 import com.newfly.dao.PlayerRedis;
 import com.newfly.dao.TeamRedis;
+import com.newfly.mapper.MessageMapper;
 import com.newfly.pojo.Message;
+import com.newfly.pojo.ResultMessage;
 import io.netty.channel.Channel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
+
+/*
+ * 广播频道
+ * 0: 无
+ * 1: 世界
+ * 2: 当前scene
+ * 3: 附近
+ * 4: 当前家族
+ * 5: 当前队伍
+ * */
 @Service
 public class ChatService
 {
     @Autowired
+    MessageMapper messageMapper;
+
+    @Autowired
     PlayerRedis playerRedis;
 
     @Autowired
-    ChannelRedis channelRedis;
+    MapSceneRedis mapSceneRedis;
 
     @Autowired
     TeamRedis teamRedis;
 
 
-    // 频道聊天
-    public Message chatPublic(Message msg) {
+    // 广播聊天
+    public ResultMessage chatPublic(ResultMessage msg) {
         String[] strings = msg.getBody().split(":");
         int id = Integer.parseInt(strings[0]);
-        int channelId = Integer.parseInt(strings[0]);
+        String channelId = strings[0];
         String message = strings[2];
 
-        // 是否有该频道并广播
-        if (channelRedis.existChannel(channelId)) {
-            Set<String> channelMember = channelRedis.channelMember(channelId);
-            for (String curId : channelMember) {
-                Channel channel = SocketChannelMap.get(curId);
-                Message result = new Message(ConstantDefine.MESSAGE_CHAT_PUBLIC_RETURN, curId + id + message);
-                channel.writeAndFlush(result);
-            }
+        Set<String> players = null;
+        switch (Integer.parseInt(channelId)) {
+            case 1: // 世界频道
+                players = mapSceneRedis.worldMember();
+                break;
+            case 2: // 当前scene
+                players = mapSceneRedis.sceneMember(channelId);
+                break;
+            case 3: // 附近
+                break;
+            case 4: // 家族
+                break;
+            case 5: // 队伍
+                players = teamRedis.teamMember(channelId);
+                break;
+        }
+
+        if (players == null)
+            return null;
+        // 给所有人广播, 后期可以优化, 本人writeAndFlush,其他人用write
+        for (String curId : players) {
+            Channel channel = SocketChannelMap.get(curId);
+            ResultMessage result = new ResultMessage(ConstantDefine.MESSAGE_CHAT_PUBLIC_RETURN, curId + id + message);
+            channel.writeAndFlush(result);
         }
         return null;
     }
 
     // 私聊
-    public Message chat(Message msg) {
+    public ResultMessage chat(ResultMessage msg) {
         String[] strings = msg.getBody().split(":");
-        int id = Integer.parseInt(strings[0]);
-        int targetId = Integer.parseInt(strings[0]);
+        String playerId = strings[0];
+        String targetId = strings[1];
         String message = strings[2];
 
         // 找到目标玩家的channel
-        Channel channel = SocketChannelMap.get(String.valueOf(targetId));
-        Message result = new Message(ConstantDefine.MESSAGE_CHAT_PRIVATE_RETURN, id + message);
-        channel.writeAndFlush(result);
+        Channel channel = SocketChannelMap.get(targetId);
+        ResultMessage result = new ResultMessage(ConstantDefine.MESSAGE_CHAT_PRIVATE_RETURN, playerId + ":" + message);
 
-        // 若不在线,存入数据库
-
+        // 在线:直接发送; 不在线,存入数据库
+        if (channel != null) {
+            channel.writeAndFlush(result);
+        } else {
+            Message m = new Message(Integer.parseInt(playerId), Integer.parseInt(targetId), message);
+            messageMapper.save(m);
+        }
         return null;
     }
 
     // 创建队伍
-    public Message createTeam(Message msg) {
+    public ResultMessage createTeam(ResultMessage msg) {
         String[] strings = msg.getBody().split(":");
         String playerId = strings[0];
 
@@ -73,6 +108,6 @@ public class ChatService
 
         //创建队伍
         int teamId = teamRedis.createTeam(playerId);
-        return new Message(ConstantDefine.MESSAGE_TEAM_CREATE_RETURN, String.valueOf(teamId));
+        return new ResultMessage(ConstantDefine.MESSAGE_TEAM_CREATE_RETURN, String.valueOf(teamId));
     }
 }

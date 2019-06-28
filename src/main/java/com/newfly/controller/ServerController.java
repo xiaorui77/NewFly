@@ -1,7 +1,7 @@
 package com.newfly.controller;
 
 import com.newfly.common.ConstantDefine;
-import com.newfly.pojo.Message;
+import com.newfly.pojo.ResultMessage;
 import com.newfly.service.ChatService;
 import com.newfly.service.LobbyService;
 import com.newfly.service.LoginService;
@@ -27,7 +27,7 @@ public class ServerController
     MapSceneService mapService;
 
 
-    Message handle(ChannelHandlerContext ctx, Message msg) {
+    ResultMessage handle(ChannelHandlerContext ctx, ResultMessage msg) {
         int type = msg.getType();
         switch (type) {
             case ConstantDefine.MESSAGE_PLAYER_LOGIN: // 登录
@@ -43,12 +43,12 @@ public class ServerController
             case ConstantDefine.MESSAGE_CHAT_PUBLIC: // 公共频道聊天
                 return chatPublic.chatPublic(msg);
             case ConstantDefine.MESSAGE_CHAT_PRIVATE: // 私聊
-                return null;
+                return chatPublic.chat(msg);
 
             case ConstantDefine.MESSAGE_MAP_PLAYER_MOVE: // 玩家移动
                 return mapService.movetoPlayer(msg);
             default:
-                return new Message(100, "收到了没有");
+                return new ResultMessage(100, "收到了没有");
         }
     }
 

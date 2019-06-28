@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import java.util.Set;
+
 @Repository
 public class TeamRedis
 {
@@ -23,4 +25,13 @@ public class TeamRedis
         jedis.close();
         return curTeamID++;
     }
+
+    // 获取队伍成员
+    public Set<String> teamMember(String teamId) {
+        Jedis jedis = jedisPool.getResource();
+        Set<String> member = jedis.smembers("team" + teamId);
+        jedis.close();
+        return member;
+    }
+
 }// end

@@ -1,7 +1,7 @@
 package com.newfly.controller;
 
 import com.newfly.common.SocketChannelMap;
-import com.newfly.pojo.Message;
+import com.newfly.pojo.ResultMessage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.SocketChannel;
@@ -37,13 +37,13 @@ public class SocketServerHandler extends SimpleChannelInboundHandler<Object>
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object o) {
-        Message msg = (Message) o;
+        ResultMessage msg = (ResultMessage) o;
         logger.info("接受到的消息:");
         logger.info("type:" + msg.getType());
         logger.info("body:" + msg.getBody());
         logger.info("Controller:" + serverController);
 
-        Message result = serverController.handle(ctx, msg);
+        ResultMessage result = serverController.handle(ctx, msg);
         if (result != null)
             ctx.writeAndFlush(result);
     }

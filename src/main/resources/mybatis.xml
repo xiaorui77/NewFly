@@ -11,8 +11,11 @@
             <property name="dialect" value="mysql"/>
         </plugin>
     </plugins>-->
+
+    <!-- 定义别名-->
     <typeAliases>
         <typeAlias type="com.newfly.pojo.Player" alias="player"/>
+        <typeAlias type="com.newfly.pojo.Message" alias="message"/>
     </typeAliases>
 
 </configuration>

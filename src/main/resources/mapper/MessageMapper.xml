@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.newfly.mapper.MessageMapper">
+
+    <!-- 添加数据-->
+    <insert id="save" parameterType="message">
+        insert into message(`from`, target, title, `body`, create_time
+        )
+        values (#{from}, #{target}, #{title}, #{body}, current_timestamp)
+    </insert>
+
+    <!-- 通过发送者查询-->
+    <select id="queryByFrom" parameterType="int" resultType="message">
+        select id, `from`, target, title, `body`
+        from message
+        where `from` = #{from}
+    </select>
+
+    <!-- 通过接收者查询-->
+    <select id="queryByTarget" parameterType="int" resultType="message">
+        select id, `from`, target, title, `body`
+        from message
+        where target = #{from}
+    </select>
+</mapper>

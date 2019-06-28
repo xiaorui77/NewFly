@@ -5,12 +5,13 @@ public class Player
     private int id;
     private String name;
     private String password;
-    private int grade;
-    private int exp;
+    private int grade;  // 等级
+    private int exp;    // 经验
     private int money;
+    private int scene;  // 场景
     private int x;
     private int y;
-    String create_time;
+    private String create_time;
 
     public Player() {
     }
@@ -42,6 +43,10 @@ public class Player
 
     public int getMoney() {
         return money;
+    }
+
+    public int getScene() {
+        return scene;
     }
 
     public int getX() {
@@ -81,6 +86,10 @@ public class Player
         this.money = money;
     }
 
+    public void setScene(int scene) {
+        this.scene = scene;
+    }
+
     public void setX(int x) {
         this.x = x;
     }
@@ -108,4 +117,5 @@ public class Player
                 ", create_time='" + create_time + '\'' +
                 '}';
     }
+
 }

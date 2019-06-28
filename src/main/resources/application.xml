@@ -8,9 +8,6 @@
 
 
     <!-- redis-->
-    <bean id="redisUtil" class="com.newfly.common.RedisUtil">
-        <property name="jedisPool" ref="jedisPool"/>
-    </bean>
     <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
         <constructor-arg name="host" value="192.168.22.129"/>
         <constructor-arg name="port" value="6379"/>

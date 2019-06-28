@@ -1,6 +1,6 @@
 package com.newfly.common;
 
-import com.newfly.pojo.Message;
+import com.newfly.pojo.ResultMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
@@ -49,6 +49,6 @@ public class LengthFieldMessageDecoder extends LengthFieldBasedFrameDecoder
         buf.readBytes(b);
 
         msgBody = new String(b, StandardCharsets.UTF_8);
-        return new Message(length, type, msgBody);
+        return new ResultMessage(length, type, msgBody);
     }
 }

@@ -91,8 +91,10 @@ id:taskId:subTaskId
 
 ## Redis结构(不需要自己建立,程序会自动建立)
 * 玩家信息 n个 (hash结构), 每个玩家id作为key
-* 所有聊天频道列表(sets结构) key为chatChannel value为各个频道的id
-    保存所有聊天频道列表(包括默认,队伍,家族等)
+
+* 世界 (sets结构) world 保存所有玩家id
+* 场景 n个 (sets结构) key为scene+Id 保存此场景中所有玩家的id
+
 * 默认公共聊天频道的成员列表(sets结构) n个 频道ID作为key 
     注意:不包括队伍和家族的,因为队伍和家族的可以直接从其成员列表中获取
 

@@ -1,6 +1,6 @@
 package com.newfly.test;
 
-import com.newfly.pojo.Message;
+import com.newfly.pojo.ResultMessage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.slf4j.Logger;
@@ -22,10 +22,10 @@ public class SocketClientHandlerTest extends SimpleChannelInboundHandler<Object>
 
     @Override
     protected void channelRead0(ChannelHandlerContext arg0, Object o) {
-        Message msg = (Message) o;
+        ResultMessage msg = (ResultMessage) o;
         logger.info("接受到的消息:");
-        logger.info("type:" + msg.getType());
-        logger.info("body:" + msg.getBody());
+        logger.info("type=>" + msg.getType());
+        logger.info("body=>" + msg.getBody());
     }
 
     @Override

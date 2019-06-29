@@ -14,7 +14,7 @@ public class ConstantDefine
 
     // 队伍,家族,聊天等 3200
     private static final int MESSAGE_CHAT = 3200;
-    // 私聊
+    // 好友聊天
     public static final int MESSAGE_CHAT_PRIVATE = MESSAGE_CHAT + 11;
     public static final int MESSAGE_CHAT_PRIVATE_RETURN = MESSAGE_CHAT + 12;
     // 公共聊天
@@ -24,6 +24,14 @@ public class ConstantDefine
     public static final int MESSAGE_TEAM_CREATE = MESSAGE_CHAT + 31;
     public static final int MESSAGE_TEAM_CREATE_RETURN = MESSAGE_CHAT + 32;
     // 查询队伍
+    public static final int MESSAGE_TEAM_QUERY = MESSAGE_CHAT + 33;
+    public static final int MESSAGE_TEAM_QUERY_RETUREN = MESSAGE_CHAT + 34;
+    // 加入队伍
+    public static final int MESSAGE_TEAM_JOIN = MESSAGE_CHAT + 35;
+    public static final int MESSAGE_TEAM_JOIN_RETURN = MESSAGE_CHAT + 36;
+    // 退出队伍
+    public static final int MESSAGE_TEAM_QUIT = MESSAGE_CHAT + 37;
+    public static final int MESSAGE_TEAM_QUIT_RETURN = MESSAGE_CHAT + 38;
 
 
     // 场景,玩家移动等

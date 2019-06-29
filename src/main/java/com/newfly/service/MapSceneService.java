@@ -45,4 +45,8 @@ public class MapSceneService
         }
         return null;
     }
+
+    // 场景切换
+    //注意修改场景保存的队伍列表
+
 }

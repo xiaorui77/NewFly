@@ -23,9 +23,7 @@ public class SocketClientHandlerTest extends SimpleChannelInboundHandler<Object>
     @Override
     protected void channelRead0(ChannelHandlerContext arg0, Object o) {
         ResultMessage msg = (ResultMessage) o;
-        logger.info("接受到的消息:");
-        logger.info("type=>" + msg.getType());
-        logger.info("body=>" + msg.getBody());
+        logger.info("收到消息 type=" + msg.getType() + " body=>" + msg.getBody());
     }
 
     @Override

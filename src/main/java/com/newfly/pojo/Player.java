@@ -5,6 +5,7 @@ public class Player
     private int id;
     private String name;
     private String password;
+    private int profession; // 职业
     private int grade;  // 等级
     private int exp;    // 经验
     private int money;
@@ -31,6 +32,10 @@ public class Player
 
     public String getPassword() {
         return password;
+    }
+
+    public int getProfession() {
+        return profession;
     }
 
     public int getGrade() {
@@ -74,6 +79,10 @@ public class Player
         this.password = password;
     }
 
+    public void setProfession(int profession) {
+        this.profession = profession;
+    }
+
     public void setGrade(int grade) {
         this.grade = grade;
     }
@@ -102,20 +111,20 @@ public class Player
         this.create_time = create_time;
     }
 
-
     @Override
     public String toString() {
         return "Player{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
+                ", profession=" + profession +
                 ", grade=" + grade +
                 ", exp=" + exp +
                 ", money=" + money +
+                ", scene=" + scene +
                 ", x=" + x +
                 ", y=" + y +
                 ", create_time='" + create_time + '\'' +
                 '}';
     }
-
 }

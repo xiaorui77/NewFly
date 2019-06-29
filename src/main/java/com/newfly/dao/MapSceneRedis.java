@@ -19,7 +19,7 @@ public class MapSceneRedis
         // 添加到世界
         jedis.sadd("world", playerId);
         // 添加到相应scene中
-        jedis.sadd("scene" + sceneId, playerId);
+        jedis.sadd("scene:" + sceneId, playerId);
         jedis.close();
     }
 
@@ -27,22 +27,25 @@ public class MapSceneRedis
     public void remove(String playerId, String sceneId) {
         Jedis jedis = jedisPool.getResource();
         jedis.srem("world", playerId);
-        jedis.srem("scene" + sceneId, playerId);
+        jedis.srem("scene:" + sceneId, playerId);
         jedis.close();
     }
 
-    // 切换场景
+    // 玩家所属场景转变
     public void switchScene(String playerId, String oldScene, String newScene) {
         Jedis jedis = jedisPool.getResource();
-        jedis.srem("scene" + oldScene, playerId);
-        jedis.sadd("scene" + newScene, playerId);
+
+        // 场景玩家修改
+        jedis.srem("scene:" + oldScene, playerId);
+        jedis.sadd("scene:" + newScene, playerId);
+
         jedis.close();
     }
 
     // 获取某个场景的玩家列表
     public Set<String> sceneMember(String sceneId) {
         Jedis jedis = jedisPool.getResource();
-        return jedis.smembers("scene" + sceneId);
+        return jedis.smembers("scene:" + sceneId);
     }
 
     // 获取世界玩家列表
@@ -51,6 +54,14 @@ public class MapSceneRedis
         Set<String> member = jedis.smembers("world");
         jedis.close();
         return member;
+    }
+
+    // 时间和场景移除队伍
+    public void removeTeam(String teamId, String sceneId) {
+        Jedis jedis = jedisPool.getResource();
+        jedis.srem("world_team", teamId);
+        jedis.srem("scene_team:" + sceneId, teamId);
+        jedis.close();
     }
 
 

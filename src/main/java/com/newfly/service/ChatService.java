@@ -43,11 +43,12 @@ public class ChatService
     // 广播聊天
     public ResultMessage chatPublic(ResultMessage msg) {
         String[] strings = msg.getBody().split(":");
-        int id = Integer.parseInt(strings[0]);
-        String channelId = strings[0];
+        String playerId = strings[0];
+        String channelId = strings[1];
         String message = strings[2];
 
         Set<String> players = null;
+        // 查找频道的玩家列表
         switch (Integer.parseInt(channelId)) {
             case 1: // 世界频道
                 players = mapSceneRedis.worldMember();
@@ -66,16 +67,17 @@ public class ChatService
 
         if (players == null)
             return null;
-        // 给所有人广播, 后期可以优化, 本人writeAndFlush,其他人用write
+        // 给其他所有人广播,
+        players.remove(playerId);
         for (String curId : players) {
             Channel channel = SocketChannelMap.get(curId);
-            ResultMessage result = new ResultMessage(ConstantDefine.MESSAGE_CHAT_PUBLIC_RETURN, curId + id + message);
+            ResultMessage result = new ResultMessage(ConstantDefine.MESSAGE_CHAT_PUBLIC_RETURN, curId + ":" + playerId + ":" + message);
             channel.writeAndFlush(result);
         }
         return null;
     }
 
-    // 私聊
+    // 好友聊天
     public ResultMessage chat(ResultMessage msg) {
         String[] strings = msg.getBody().split(":");
         String playerId = strings[0];
@@ -96,18 +98,4 @@ public class ChatService
         return null;
     }
 
-    // 创建队伍
-    public ResultMessage createTeam(ResultMessage msg) {
-        String[] strings = msg.getBody().split(":");
-        String playerId = strings[0];
-
-        // 是否有队伍
-        if (playerRedis.existTeam(playerId)) {
-            return null;
-        }
-
-        //创建队伍
-        int teamId = teamRedis.createTeam(playerId);
-        return new ResultMessage(ConstantDefine.MESSAGE_TEAM_CREATE_RETURN, String.valueOf(teamId));
-    }
-}
+}// end

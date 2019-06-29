@@ -38,10 +38,11 @@ public class LoginService
 
     // 玩家登录
     public ResultMessage login(ChannelHandlerContext ctx, ResultMessage msg) {
-        // 查询mysql数据库
+        // 分离数据
         String[] strings = msg.getBody().split(":");
         String name = strings[0];
         String password = strings[1];
+
         Player player = new Player(name, password);
 
         // 进行登录验证
@@ -59,7 +60,8 @@ public class LoginService
         mapSceneRedis.add(String.valueOf(player.getId()), String.valueOf(player.getScene()));
 
         // 返回玩家信息
-        return new ResultMessage(ConstantDefine.MESSAGE_PLAYER_LOGIN_RETURN, player.toString());
+        String playerInfo = playerRedis.playerInfo(String.valueOf(player.getId()));
+        return new ResultMessage(ConstantDefine.MESSAGE_PLAYER_LOGIN_RETURN, playerInfo);
     }
 
     // 玩家退出

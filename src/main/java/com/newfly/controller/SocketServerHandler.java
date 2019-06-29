@@ -16,13 +16,12 @@ public class SocketServerHandler extends SimpleChannelInboundHandler<Object>
     private static final Logger logger = LoggerFactory.getLogger(SocketServer.class);
 
     // 初始化时获取
-    private ServerController serverController;
+    private static ServerController serverController;
 
 
-    SocketServerHandler() {
-        super();
+    static {
         ApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
-        this.serverController = (ServerController) context.getBean("serverController");
+        serverController = (ServerController) context.getBean("serverController");
     }
 
     @Override
@@ -38,10 +37,9 @@ public class SocketServerHandler extends SimpleChannelInboundHandler<Object>
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object o) {
         ResultMessage msg = (ResultMessage) o;
-        logger.info("接受到的消息:");
-        logger.info("type:" + msg.getType());
+        logger.info("接受到的消息(" + msg.getType() + "):");
         logger.info("body:" + msg.getBody());
-        logger.info("Controller:" + serverController);
+        // logger.info("Controller:" + serverController);
 
         ResultMessage result = serverController.handle(ctx, msg);
         if (result != null)
@@ -50,15 +48,13 @@ public class SocketServerHandler extends SimpleChannelInboundHandler<Object>
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        logger.info("建立连接");
-        String clientId = "随机ID";
-        SocketChannelMap.add(clientId, (SocketChannel) ctx.channel());
+        logger.info("与新的客户端建立连接");
         super.channelActive(ctx);
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        logger.info("连接断开");
+        logger.info("与客户端连接断开");
         SocketChannelMap.remove((SocketChannel) ctx.channel()); // 删除channel
         super.channelInactive(ctx);
     }

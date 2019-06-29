@@ -1,6 +1,6 @@
 # 梦幻修仙(NewFly) 游戏服务器
 
-## 技术栈 
+## 使用的工具或技术等
 * java maven spring
 
 * netty4.1.32
@@ -10,62 +10,69 @@
 
 ## 说明
 使用maven管理, java8环境
-coder文件夹是我自己做的一个备份, 没有任何影响, 可以忽略
 
 
-## 数据格式(目前使用字符串形式)
-length type content
 
+## 游戏介绍
+这是一个多人在线网游
+
+
+
+
+## 数据包格式(content目前使用字符串形式)
+length(2B) type(2B) content
+
+## type分类
 * 其他类 2000
 * 玩家类 3000
 * 战斗类 5000
 
 
 ### 登录 3100
-* 玩家登录 3111
+* 玩家登录 3111  
 name:password
-* 返回 3112
+* 返回 3112  
 id:name:profession:grade:exp:money:scene:x:y
 
-* 玩家退出 3113
-* 返回 无
+* 玩家退出 3113  
+* 返回 无  
 
-* 注册 3121
-* 注销 3223
+* 注册 3121  
+* 注销 3223  
 
 
 ### 队伍,家族,聊天等 3200
 
-* 好友聊天 3211
-id:targetID:message
-* 返回 3212
+* 好友聊天 3211  
+playerId:targetID:message
+* 返回 3212  
 fromId:message
 
-* 公共聊天 3221
-id:channelId:message
-* 返回 3222
+* 公共聊天 3221  
+playerId:channelId:message
+* 返回 3222  
 channelId:fromId:fromName:message
 
 
-* 创建队伍 3231
+* 创建队伍 3231  
 playerId
-* 创建成功返回 3232
+* 创建成功返回 3232  
 teamId
-* 查询队伍 3233
-playerId:world    世界所有的队伍
-playerId:scene  当前场景中的队伍
-playerId:near   附近队伍,暂时不做
-playerId:teamId 查询指定队伍的信息
-* 成功返回 3234
-队伍id:队伍名:队长id:队长等级:队长职业:队伍人数
-* 加入队伍请求 3235
+* 查询队伍 3233  
+playerId:world    世界所有的队伍  
+playerId:scene  当前场景中的队伍  
+playerId:near   附近队伍,暂时不做  
+playerId:teamId 查询指定队伍的信息  
+* 成功返回 3234  
+队伍id:队伍名:队长id:队长等级:队长职业:队伍人数  
+* 加入队伍请求 3235  
 playerId:teamId
-* 加入成功/更新队伍返回 3236
-teamId:captainId:member1:member2
-* 退出队伍请求 3237
-playerId
-* 成功返回 3238
-teamId
+* 加入成功/更新队伍返回 3236  
+teamId:captainId:member1:member2  
+* 退出队伍请求 3237  
+playerId  
+* 成功返回 3238  
+teamId  
 
 
 
@@ -86,7 +93,7 @@ id:sceneId:x:y
 未实现
 
 * 放到市场 3421
-playId:goodId:num
+playerId:goodId:num
 * 获取列表 3423
 * 购买 3424
 * 不卖了 3427
@@ -95,9 +102,9 @@ playId:goodId:num
 
 ### 任务 3500
 * 接主线任务 351
-id:taskId:subTaskId
+playerId:taskId:subTaskId
 * 返回
-id:taskId:subTaskId
+playerId:taskId:subTaskId
 
 
 
@@ -136,5 +143,3 @@ id:taskId:subTaskId
 
 * 场景列表 **scene** (sets结构)
 * 每个场景的玩家列表 n个 key为scene+sceneId value为成员玩家id
-org.apache.log4j.PatternLayout
-%d %p [%c] - %m%n 

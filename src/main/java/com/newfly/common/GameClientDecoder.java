@@ -1,13 +1,10 @@
 package com.newfly.common;
 
-import com.newfly.pojo.ResultMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 
-import java.nio.charset.StandardCharsets;
-
-public class LengthFieldMessageDecoder extends LengthFieldBasedFrameDecoder
+public class GameClientDecoder extends LengthFieldBasedFrameDecoder
 {
     private static final int MAX_FRAME_LENGTH = 65536; // 最大报文长度
     private static final int LENGTH_FIELD_LENGTH = 2;   // length字段长度
@@ -17,31 +14,19 @@ public class LengthFieldMessageDecoder extends LengthFieldBasedFrameDecoder
 
     private static final int HEADER_SIZE = 2 + 2;
 
-    public LengthFieldMessageDecoder() {
+    public GameClientDecoder() {
         super(MAX_FRAME_LENGTH, LENGTH_FIELD_OFFSET, LENGTH_FIELD_LENGTH, LENGTH_ADJUSTMENT, INITIAL_BYTES_TO_STRIP);
     }
 
-    @Override
     protected Object decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
         if (in == null)
             return null;
 
         if (in.readableBytes() < HEADER_SIZE) {
-            throw new Exception("错误的数据包");
+            throw new Exception("错误的消息");
         }
 
-        int length = in.readShort();
         int type = in.readShort();
-
-        if (in.readableBytes() < length) {
-            throw new Exception("消息不正确");
-        }
-
-        ByteBuf buf = in.readBytes(length);
-        byte[] b = new byte[buf.readableBytes()];
-        buf.readBytes(b);
-
-        String msgBody = new String(b, StandardCharsets.UTF_8);
-        return new ResultMessage(length, type, msgBody);
+        return null;
     }
 }

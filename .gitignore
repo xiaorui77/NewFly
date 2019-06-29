@@ -1,6 +1,7 @@
 # ignore target files
 .idea/
 .settings/
+coper/
 target/
 .project
 

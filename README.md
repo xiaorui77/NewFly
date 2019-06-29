@@ -71,9 +71,9 @@ teamId
 
 ### 副本,场景,玩家移动等 3300
 * 玩家移动 3311
-id:mapID:x:y
+id:sceneId:x:y
 * 返回 3312
-id:x:y
+id:sceneId:x:y
 
 
 

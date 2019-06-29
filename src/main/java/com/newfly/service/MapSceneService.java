@@ -5,10 +5,10 @@ import com.newfly.common.SocketChannelMap;
 import com.newfly.dao.MapSceneRedis;
 import com.newfly.dao.PlayerRedis;
 import com.newfly.pojo.ResultMessage;
-import io.netty.channel.Channel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -29,20 +29,24 @@ public class MapSceneService
         String moveX = strings[2];
         String moveY = strings[3];
 
-        // 控制玩家移动
-        if (!playerRedis.movetoPlayer(playerId, moveX, moveY))
+        if (!playerRedis.exist(playerId))
             return null;
 
-        // 广播给其他玩家
-        Set<String> players = mapSceneRedis.sceneMember(sceneId);
-        for (String player : players) {
-            Channel channel = SocketChannelMap.get(player);
-            if (channel == null)
-                continue;
-            String content = player + ":" + moveX + ":" + moveY;
-            ResultMessage message = new ResultMessage(ConstantDefine.MESSAGE_MAP_PLAYER_MOVE_RETURN, content);
-            channel.writeAndFlush(message);
+        // 控制玩家移动
+        playerRedis.moveto(playerId, moveX, moveY);
+
+        Set<String> players = new HashSet<>();
+        // 场景切换
+        String oldScene = playerRedis.switchScene(playerId, sceneId);
+        if (!oldScene.equals(sceneId)) {
+            players.addAll(mapSceneRedis.sceneMember(oldScene));
+            mapSceneRedis.switchScene(playerId, oldScene, sceneId); // 测试有没有错误
         }
+        // 添加新场景的所有玩家
+        players.addAll(mapSceneRedis.sceneMember(sceneId));
+
+        String content = msg.getBody();
+        SocketChannelMap.sendAll(players, ConstantDefine.MESSAGE_MAP_PLAYER_MOVE_RETURN, content);
         return null;
     }
 

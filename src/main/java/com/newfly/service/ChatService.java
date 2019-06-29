@@ -54,25 +54,30 @@ public class ChatService
                 players = mapSceneRedis.worldMember();
                 break;
             case 2: // 当前scene
-                players = mapSceneRedis.sceneMember(channelId);
+                // 获取该玩家所在的sceneId
+                String sceneId = playerRedis.getScene(playerId);
+                players = mapSceneRedis.sceneMember(sceneId);
                 break;
             case 3: // 附近
                 break;
             case 4: // 家族
                 break;
             case 5: // 队伍
-                players = teamRedis.teamMember(channelId);
+                // 获取该玩家所在的sceneId
+                String teamId = playerRedis.getTeam(playerId);
+                players = teamRedis.teamMember(teamId);
                 break;
         }
 
         if (players == null)
             return null;
-        // 给其他所有人广播,
+        // 发送者的name
+        String sendName = playerRedis.getName(playerId);
+        // 给其他所有人广播
         players.remove(playerId);
         for (String curId : players) {
-            Channel channel = SocketChannelMap.get(curId);
-            ResultMessage result = new ResultMessage(ConstantDefine.MESSAGE_CHAT_PUBLIC_RETURN, curId + ":" + playerId + ":" + message);
-            channel.writeAndFlush(result);
+            String content = channelId + ":" + playerId + ":" + sendName + ":" + message;
+            SocketChannelMap.sendTo(curId, ConstantDefine.MESSAGE_CHAT_PUBLIC_RETURN, content);
         }
         return null;
     }

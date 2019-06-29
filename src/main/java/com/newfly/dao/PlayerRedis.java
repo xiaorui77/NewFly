@@ -61,6 +61,14 @@ public class PlayerRedis
         return string;
     }
 
+    // 是否存在
+    public boolean exist(String playerId) {
+        Jedis jedis = jedisPool.getResource();
+        boolean exist = jedis.exists("player:" + playerId);
+        jedis.close();
+        return exist;
+    }
+
     // 是否是队长
     public boolean isCaptain(String playerId) {
         Jedis jedis = jedisPool.getResource();
@@ -82,14 +90,23 @@ public class PlayerRedis
         return sceneId;
     }
 
-    // 玩家切换场景
-    public void switchScene(String playerId, String oldScene, String newScene) {
+    // 场景切换, 返回原来的场景
+    public String switchScene(String playerId, String sceneId) {
         Jedis jedis = jedisPool.getResource();
+        String oldScene = jedis.hget("player:" + playerId, "scene");
+        jedis.hset("player:" + playerId, "scene", sceneId);
+        jedis.close();
+        return oldScene;
+    }
 
-        // 玩家所属场景修改
-        jedis.hset("player:" + playerId, "scene", newScene);
+    // 玩家移动
+    public void moveto(String playerId, String x, String y) {
+        Jedis jedis = jedisPool.getResource();
+        jedis.hset("player:" + playerId, "x", x);
+        jedis.hset("player:" + playerId, "y", y);
         jedis.close();
     }
+
 
     // 玩家加入队伍, 返回队长id
     public String joinTeam(String playerId, String teamId) {
@@ -123,21 +140,9 @@ public class PlayerRedis
         return result;
     }
 
-    // 玩家移动
-    public boolean movetoPlayer(String playerId, String x, String y) {
-        Jedis jedis = jedisPool.getResource();
-        if (jedis.hexists("player:" + playerId, "id")) {
-            jedis.hset("player:" + playerId, "x", x);
-            jedis.hset("player:" + playerId, "y", y);
-            jedis.close();
-            return true;
-        }
-        return false;
-    }
-
 
     // 获取玩家name
-    public String getName(String palyerId){
+    public String getName(String palyerId) {
         Jedis jedis = jedisPool.getResource();
         String name = jedis.hget("player:" + palyerId, "name");
         jedis.close();

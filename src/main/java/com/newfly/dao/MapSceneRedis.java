@@ -38,7 +38,6 @@ public class MapSceneRedis
         // 场景玩家修改
         jedis.srem("scene:" + oldScene, playerId);
         jedis.sadd("scene:" + newScene, playerId);
-
         jedis.close();
     }
 

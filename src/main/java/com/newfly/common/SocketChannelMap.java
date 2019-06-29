@@ -51,7 +51,7 @@ public class SocketChannelMap
         for (String a : all) {
             Channel channel = map.get(a);
             if (channel == null)
-                return false;
+                break;
             channel.writeAndFlush(new ResultMessage(type, content));
         }
         return true;

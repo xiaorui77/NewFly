@@ -56,7 +56,6 @@ public class ServerController
             case ConstantDefine.MESSAGE_TEAM_QUIT: // 离开队伍
                 return teamService.quitTeam(msg);
 
-
             case ConstantDefine.MESSAGE_MAP_PLAYER_MOVE: // 玩家移动
                 return mapService.movetoPlayer(msg);
             default:

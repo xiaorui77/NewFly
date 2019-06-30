@@ -78,7 +78,7 @@ public class TeamService
             Map<String, String> teamInfo = teamRedis.teamInfo(t);
             Map<String, String> captainInfo = playerRedis.getInfo(teamInfo.get("captainId"));
             int memberNum = Integer.valueOf(teamInfo.get("memberNum"));
-            channel.write(new ResultMessage(ConstantDefine.MESSAGE_TEAM_QUERY_RETUREN, t + ":" + teamInfo.get("name") + ":" + teamInfo.get("captainId") + ":" + captainInfo.get("grade") + ":" + captainInfo.get("profession") + ":" + (memberNum + 1)));
+            channel.write(new ResultMessage(ConstantDefine.MESSAGE_TEAM_QUERY_RETURN, t + ":" + teamInfo.get("name") + ":" + teamInfo.get("captainId") + ":" + captainInfo.get("grade") + ":" + captainInfo.get("profession") + ":" + (memberNum + 1)));
         }
         channel.flush();
         return null;

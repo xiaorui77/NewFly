@@ -2,8 +2,8 @@ package com.newfly.service;
 
 import com.newfly.common.ConstantDefine;
 import com.newfly.common.SocketChannelMap;
-import com.newfly.dao.MapSceneRedis;
 import com.newfly.dao.PlayerRedis;
+import com.newfly.dao.SceneRedis;
 import com.newfly.dao.TeamRedis;
 import com.newfly.mapper.MessageMapper;
 import com.newfly.pojo.Message;
@@ -34,7 +34,7 @@ public class ChatService
     PlayerRedis playerRedis;
 
     @Autowired
-    MapSceneRedis mapSceneRedis;
+    SceneRedis sceneRedis;
 
     @Autowired
     TeamRedis teamRedis;
@@ -51,12 +51,12 @@ public class ChatService
         // 查找频道的玩家列表
         switch (Integer.parseInt(channelId)) {
             case 1: // 世界频道
-                players = mapSceneRedis.worldMember();
+                players = sceneRedis.worldMember();
                 break;
             case 2: // 当前scene
                 // 获取该玩家所在的sceneId
                 String sceneId = playerRedis.getScene(playerId);
-                players = mapSceneRedis.sceneMember(sceneId);
+                players = sceneRedis.sceneMember(sceneId);
                 break;
             case 3: // 附近
                 break;

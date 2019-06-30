@@ -8,7 +8,7 @@ import redis.clients.jedis.JedisPool;
 import java.util.Set;
 
 @Repository
-public class MapSceneRedis
+public class SceneRedis
 {
     @Autowired
     JedisPool jedisPool;
@@ -44,7 +44,9 @@ public class MapSceneRedis
     // 获取某个场景的玩家列表
     public Set<String> sceneMember(String sceneId) {
         Jedis jedis = jedisPool.getResource();
-        return jedis.smembers("scene:" + sceneId);
+        Set<String> members = jedis.smembers("scene:" + sceneId);
+        jedis.close();
+        return members;
     }
 
     // 获取世界玩家列表

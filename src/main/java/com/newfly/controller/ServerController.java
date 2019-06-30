@@ -10,7 +10,9 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class ServerController
 {
-    private final LoginService playerService;
+    private final LoginService loginService;
+
+    private final PlayerService playerService;
 
     private final ChatService chatPublic;
 
@@ -20,7 +22,8 @@ public class ServerController
 
     private final TaskService taskService;
 
-    public ServerController(LoginService playerService, ChatService chatPublic, MapSceneService mapService, TeamService teamService, TaskService taskService) {
+    public ServerController(LoginService loginService, PlayerService playerService, ChatService chatPublic, MapSceneService mapService, TeamService teamService, TaskService taskService) {
+        this.loginService = loginService;
         this.playerService = playerService;
         this.chatPublic = chatPublic;
         this.mapService = mapService;
@@ -33,14 +36,17 @@ public class ServerController
         int type = msg.getType();
         switch (type) {
             case ConstantDefine.MESSAGE_PLAYER_LOGIN: // 登录
-                return playerService.login(ctx, msg);
+                return loginService.login(ctx, msg);
             case ConstantDefine.MESSAGE_PLAYER_LOGOUT: // 退出
-                return playerService.logout(msg);
+                return loginService.logout(msg);
 
             case 2201: // 注册
                 return null;
             case 2203: // 注销账号
                 return null;
+
+            case ConstantDefine.MESSAGE_PLAYER_QUERY: // 查询所有玩家信息
+                return playerService.queryPlayer(msg);
 
             case ConstantDefine.MESSAGE_CHAT_PUBLIC: // 公共频道聊天
                 return chatPublic.chatPublic(msg);
@@ -66,7 +72,7 @@ public class ServerController
 
 
             default:
-                return new ResultMessage(100, "收到了没有");
+                return null;
         }
     }
 

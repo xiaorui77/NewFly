@@ -2,8 +2,8 @@ package com.newfly.service;
 
 import com.newfly.common.ConstantDefine;
 import com.newfly.common.SocketChannelMap;
-import com.newfly.dao.MapSceneRedis;
 import com.newfly.dao.PlayerRedis;
+import com.newfly.dao.SceneRedis;
 import com.newfly.pojo.ResultMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ public class MapSceneService
     PlayerRedis playerRedis;
 
     @Autowired
-    MapSceneRedis mapSceneRedis;
+    SceneRedis sceneRedis;
 
 
     // 玩家移动
@@ -39,11 +39,11 @@ public class MapSceneService
         // 场景切换
         String oldScene = playerRedis.switchScene(playerId, sceneId);
         if (!oldScene.equals(sceneId)) {
-            players.addAll(mapSceneRedis.sceneMember(oldScene));
-            mapSceneRedis.switchScene(playerId, oldScene, sceneId); // 测试有没有错误
+            players.addAll(sceneRedis.sceneMember(oldScene));
+            sceneRedis.switchScene(playerId, oldScene, sceneId); // 测试有没有错误
         }
         // 添加新场景的所有玩家
-        players.addAll(mapSceneRedis.sceneMember(sceneId));
+        players.addAll(sceneRedis.sceneMember(sceneId));
 
         String content = msg.getBody();
         SocketChannelMap.sendAll(players, ConstantDefine.MESSAGE_MAP_PLAYER_MOVE_RETURN, content);

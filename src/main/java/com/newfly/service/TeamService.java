@@ -3,8 +3,8 @@ package com.newfly.service;
 
 import com.newfly.common.ConstantDefine;
 import com.newfly.common.SocketChannelMap;
-import com.newfly.dao.MapSceneRedis;
 import com.newfly.dao.PlayerRedis;
+import com.newfly.dao.SceneRedis;
 import com.newfly.dao.TeamRedis;
 import com.newfly.pojo.ResultMessage;
 import io.netty.channel.Channel;
@@ -27,7 +27,7 @@ public class TeamService
     PlayerRedis playerRedis;
 
     @Autowired
-    MapSceneRedis mapSceneRedis;
+    SceneRedis sceneRedis;
 
 
     // 创建队伍
@@ -132,7 +132,7 @@ public class TeamService
             } else {
                 String sceneId = playerRedis.getScene(playerId);
                 // 世界和场景删除该队伍
-                mapSceneRedis.removeTeam(teamId, sceneId);
+                sceneRedis.removeTeam(teamId, sceneId);
             }
 
             // player 结构中删除 返回成功信息,只需要teamId即可

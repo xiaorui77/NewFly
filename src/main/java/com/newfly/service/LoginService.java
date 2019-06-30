@@ -2,8 +2,8 @@ package com.newfly.service;
 
 import com.newfly.common.ConstantDefine;
 import com.newfly.common.SocketChannelMap;
-import com.newfly.dao.MapSceneRedis;
 import com.newfly.dao.PlayerRedis;
+import com.newfly.dao.SceneRedis;
 import com.newfly.dao.TaskRedis;
 import com.newfly.mapper.PlayerMapper;
 import com.newfly.pojo.Player;
@@ -24,7 +24,7 @@ public class LoginService
     PlayerRedis playerRedis;
 
     @Autowired
-    MapSceneRedis mapSceneRedis;
+    SceneRedis sceneRedis;
 
     @Autowired
     TaskRedis taskRedis;
@@ -67,7 +67,7 @@ public class LoginService
         taskRedis.saveMainTask(playerId, task);
 
         // 将玩家加入世界和场景
-        mapSceneRedis.add(String.valueOf(player.getId()), String.valueOf(player.getScene()));
+        sceneRedis.add(String.valueOf(player.getId()), String.valueOf(player.getScene()));
 
         // 返回玩家信息
         String playerInfo = playerRedis.playerInfo(String.valueOf(player.getId()));
@@ -87,7 +87,7 @@ public class LoginService
         playerRedis.removePlayer(playerId);
 
         // 从世界和scene中移除
-        mapSceneRedis.remove(playerId, sceneId);
+        sceneRedis.remove(playerId, sceneId);
         return new ResultMessage(ConstantDefine.MESSAGE_PLAYER_LOGOUT_RETURN, playerId);
     }
 

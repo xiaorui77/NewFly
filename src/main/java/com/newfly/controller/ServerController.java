@@ -10,8 +10,6 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class ServerController
 {
-    private final LobbyService lobbyService;
-
     private final LoginService playerService;
 
     private final ChatService chatPublic;
@@ -20,12 +18,14 @@ public class ServerController
 
     private final TeamService teamService;
 
-    public ServerController(LobbyService lobbyService, LoginService playerService, ChatService chatPublic, MapSceneService mapService, TeamService teamService) {
-        this.lobbyService = lobbyService;
+    private final TaskService taskService;
+
+    public ServerController(LoginService playerService, ChatService chatPublic, MapSceneService mapService, TeamService teamService, TaskService taskService) {
         this.playerService = playerService;
         this.chatPublic = chatPublic;
         this.mapService = mapService;
         this.teamService = teamService;
+        this.taskService = taskService;
     }
 
 
@@ -58,6 +58,13 @@ public class ServerController
 
             case ConstantDefine.MESSAGE_MAP_PLAYER_MOVE: // 玩家移动
                 return mapService.movetoPlayer(msg);
+
+            case ConstantDefine.MESSAGE_TASK_CHANGE: // 任务阶段变化
+                return taskService.change(msg);
+            case ConstantDefine.MESSAGE_TASK_QUERY: // 查询任务
+                return taskService.checkTask(msg);
+
+
             default:
                 return new ResultMessage(100, "收到了没有");
         }

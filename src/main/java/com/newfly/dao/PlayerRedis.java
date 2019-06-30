@@ -2,7 +2,6 @@ package com.newfly.dao;
 
 
 import com.newfly.pojo.Player;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -13,8 +12,11 @@ import java.util.Map;
 @Repository
 public class PlayerRedis
 {
-    @Autowired
-    private JedisPool jedisPool;
+    private final JedisPool jedisPool;
+
+    public PlayerRedis(JedisPool jedisPool) {
+        this.jedisPool = jedisPool;
+    }
 
 
     // 设置玩家信息, key为玩家id
@@ -142,9 +144,9 @@ public class PlayerRedis
 
 
     // 获取玩家name
-    public String getName(String palyerId) {
+    public String getName(String playerId) {
         Jedis jedis = jedisPool.getResource();
-        String name = jedis.hget("player:" + palyerId, "name");
+        String name = jedis.hget("player:" + playerId, "name");
         jedis.close();
         return name;
     }

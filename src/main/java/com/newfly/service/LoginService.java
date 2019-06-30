@@ -4,9 +4,11 @@ import com.newfly.common.ConstantDefine;
 import com.newfly.common.SocketChannelMap;
 import com.newfly.dao.MapSceneRedis;
 import com.newfly.dao.PlayerRedis;
+import com.newfly.dao.TaskRedis;
 import com.newfly.mapper.PlayerMapper;
 import com.newfly.pojo.Player;
 import com.newfly.pojo.ResultMessage;
+import com.newfly.pojo.Task;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.SocketChannel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +26,16 @@ public class LoginService
     @Autowired
     MapSceneRedis mapSceneRedis;
 
+    @Autowired
+    TaskRedis taskRedis;
 
-    // 创建新玩家
+
+    // 创建新游戏角色
     public void createPlayer() {
 
     }
 
-    // 删除玩家账号
+    // 删除游戏角色
     public void deletePlayer() {
 
     }
@@ -47,14 +52,19 @@ public class LoginService
 
         // 进行登录验证
         player = playerMapper.login(player);
-        if (player == null) {
+        if (player == null || player.getId() < 10000)
             return null;
-        }
+        String playerId = String.valueOf(player.getId());
+
         // 保存该用户的channel
-        SocketChannelMap.add(String.valueOf(player.getId()), (SocketChannel) ctx.channel());
+        SocketChannelMap.add(playerId, (SocketChannel) ctx.channel());
 
         // 将用户信息存入redis
         playerRedis.savePlayer(player);
+
+        // 保存玩家主线任务信息
+        Task task = playerMapper.queryTask(playerId);
+        taskRedis.saveMainTask(playerId, task);
 
         // 将玩家加入世界和场景
         mapSceneRedis.add(String.valueOf(player.getId()), String.valueOf(player.getScene()));
@@ -66,7 +76,10 @@ public class LoginService
 
     // 玩家退出
     public ResultMessage logout(ResultMessage msg) {
-        String playerId = msg.getBody();
+        // 分离数据
+        String[] strings = msg.getBody().split(":");
+        String playerId = strings[0];
+
         // 判断是否可以退出
         String sceneId = playerRedis.getScene(playerId);
 
@@ -75,7 +88,7 @@ public class LoginService
 
         // 从世界和scene中移除
         mapSceneRedis.remove(playerId, sceneId);
-        return null;
+        return new ResultMessage(ConstantDefine.MESSAGE_PLAYER_LOGOUT_RETURN, playerId);
     }
 
 

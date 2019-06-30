@@ -4,10 +4,26 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.newfly.mapper.PlayerMapper">
 
+    <!-- 查询用户名和密码-->
     <select id="login" parameterType="player" resultType="player">
-        SELECT *
-        FROM player
-        WHERE name = #{name}
-          AND password = #{password}
+        select id,
+               name,
+               profession,
+               grade,
+               scene,
+               exp,
+               money,
+               x,
+               y
+        from player
+        where name = #{name}
+          and password = #{password}
+    </select>
+
+    <!-- 查询任务-->
+    <select id="queryTask" parameterType="string" resultType="task">
+        select id, task, sub_task
+        from player
+        where id = #{id}
     </select>
 </mapper>

@@ -17,15 +17,13 @@ public class SocketServer
 {
     private static final Logger logger = LoggerFactory.getLogger(SocketServer.class);
     private static final String IP = "127.0.0.1";
+    //private static final String IP = "172.30.192.163";
     private static final int PORT = 9600;
 
-    /**
-     * 分配用于处理业务的线程组数量
-     */
+    // 分配用于处理业务的线程组数量
     private static final int BIS_GROUP_SIZE = Runtime.getRuntime().availableProcessors() * 2;
-    /**
-     * 每个线程组中线程的数量
-     */
+
+    // 每个线程组中线程的数量
     private static final int WORK_GROUP_SIZE = 4;
 
     private static EventLoopGroup bossGroup = new NioEventLoopGroup(BIS_GROUP_SIZE);
@@ -59,6 +57,7 @@ public class SocketServer
 
     public static void main(String[] args) throws Exception {
         logger.info("开始启动Socket服务器...");
+        logger.info("监听IP:" + IP + " Port=" + PORT);
         new SocketServer().run();
     }
 

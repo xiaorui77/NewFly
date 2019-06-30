@@ -40,4 +40,16 @@ public class ConstantDefine
     public static final int MESSAGE_MAP_PLAYER_MOVE = 3311;
     public static final int MESSAGE_MAP_PLAYER_MOVE_RETURN = 3312;
 
+
+    // 背包,物品,市场等
+
+
+    // 任务系统
+    private static final int MESSAGE_TASK = 8000;
+    public static final int MESSAGE_TASK_CHANGE = MESSAGE_TASK + 111;
+    public static final int MESSAGE_TASK_CHANGE_RETURN = MESSAGE_TASK + 112;
+    public static final int MESSAGE_TASK_QUERY = MESSAGE_TASK + 121;
+    public static final int MESSAGE_TASK_QUERY_RETURN = MESSAGE_TASK + 122;
+
+
 }// end

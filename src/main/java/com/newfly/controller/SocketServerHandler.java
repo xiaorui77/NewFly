@@ -34,11 +34,12 @@ public class SocketServerHandler extends SimpleChannelInboundHandler<Object>
         super.channelRead(ctx, msg);
     }
 
+
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object o) {
         ResultMessage msg = (ResultMessage) o;
-        logger.info("接受到的消息(" + msg.getType() + "):");
-        logger.info("body:" + msg.getBody());
+        logger.info("收到消息 type=" + msg.getType() + " body=>" + msg.getBody());
         // logger.info("Controller:" + serverController);
 
         ResultMessage result = serverController.handle(ctx, msg);

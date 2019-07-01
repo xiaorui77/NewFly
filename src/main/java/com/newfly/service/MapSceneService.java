@@ -1,6 +1,6 @@
 package com.newfly.service;
 
-import com.newfly.common.ConstantDefine;
+import com.newfly.common.Constant;
 import com.newfly.common.SocketChannelMap;
 import com.newfly.dao.PlayerRedis;
 import com.newfly.dao.SceneRedis;
@@ -19,6 +19,18 @@ public class MapSceneService
 
     @Autowired
     SceneRedis sceneRedis;
+
+
+    // 保存世界场景信息
+    public void addPlayer(String playerId,String sceneId){
+        sceneRedis.add(playerId, sceneId);
+    }
+
+    // 移除
+    public void removePlayer(String playerId,String sceneId) {
+        sceneRedis.remove(playerId, sceneId);
+    }
+
 
 
     // 玩家移动
@@ -46,7 +58,7 @@ public class MapSceneService
         players.addAll(sceneRedis.sceneMember(sceneId));
 
         String content = msg.getBody();
-        SocketChannelMap.sendAll(players, ConstantDefine.MESSAGE_MAP_PLAYER_MOVE_RETURN, content);
+        SocketChannelMap.sendAll(players, Constant.MESSAGE_MAP_PLAYER_MOVE_RETURN, content);
         return null;
     }
 

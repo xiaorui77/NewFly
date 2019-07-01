@@ -1,7 +1,7 @@
 package com.newfly.service;
 
 
-import com.newfly.common.ConstantDefine;
+import com.newfly.common.Constant;
 import com.newfly.common.SocketChannelMap;
 import com.newfly.dao.PlayerRedis;
 import com.newfly.dao.SceneRedis;
@@ -46,7 +46,7 @@ public class TeamService
         String teamId = teamRedis.createTeam(playerId);
         if (teamId == null)
             return null;
-        return new ResultMessage(ConstantDefine.MESSAGE_TEAM_CREATE_RETURN, teamId);
+        return new ResultMessage(Constant.MESSAGE_TEAM_CREATE_RETURN, teamId);
     }
 
     // 查询所有队伍信息
@@ -78,7 +78,7 @@ public class TeamService
             Map<String, String> teamInfo = teamRedis.teamInfo(t);
             Map<String, String> captainInfo = playerRedis.getInfo(teamInfo.get("captainId"));
             int memberNum = Integer.valueOf(teamInfo.get("memberNum"));
-            channel.write(new ResultMessage(ConstantDefine.MESSAGE_TEAM_QUERY_RETURN, t + ":" + teamInfo.get("name") + ":" + teamInfo.get("captainId") + ":" + captainInfo.get("grade") + ":" + captainInfo.get("profession") + ":" + (memberNum + 1)));
+            channel.write(new ResultMessage(Constant.MESSAGE_TEAM_QUERY_RETURN, t + ":" + teamInfo.get("name") + ":" + teamInfo.get("captainId") + ":" + captainInfo.get("grade") + ":" + captainInfo.get("profession") + ":" + (memberNum + 1)));
         }
         channel.flush();
         return null;
@@ -105,7 +105,7 @@ public class TeamService
         String memberString = teamRedis.memberString(teamId);
         Set<String> teamMember = teamRedis.teamMember(teamId);
         // 给所有成员广播
-        SocketChannelMap.sendAll(teamMember, ConstantDefine.MESSAGE_TEAM_JOIN_RETURN, teamId + ":" + memberString);
+        SocketChannelMap.sendAll(teamMember, Constant.MESSAGE_TEAM_JOIN_RETURN, teamId + ":" + memberString);
         return null;
     }
 
@@ -128,7 +128,7 @@ public class TeamService
                 // 给剩余的队长和队员发送信息
                 String memberString = teamRedis.memberString(teamId);
                 Set<String> teamMember = teamRedis.teamMember(teamId);
-                SocketChannelMap.sendAll(teamMember, ConstantDefine.MESSAGE_TEAM_JOIN_RETURN, memberString);
+                SocketChannelMap.sendAll(teamMember, Constant.MESSAGE_TEAM_JOIN_RETURN, memberString);
             } else {
                 String sceneId = playerRedis.getScene(playerId);
                 // 世界和场景删除该队伍
@@ -137,7 +137,7 @@ public class TeamService
 
             // player 结构中删除 返回成功信息,只需要teamId即可
             playerRedis.leaveTeam(playerId);
-            return new ResultMessage(ConstantDefine.MESSAGE_TEAM_QUIT_RETURN, teamId);
+            return new ResultMessage(Constant.MESSAGE_TEAM_QUIT_RETURN, teamId);
         }
 
         // 如果是普通成员
@@ -151,10 +151,10 @@ public class TeamService
         all.remove(playerId);
         for (String m : all) {
             Channel channel = SocketChannelMap.get(m);
-            channel.writeAndFlush(new ResultMessage(ConstantDefine.MESSAGE_TEAM_JOIN_RETURN, teamId + ":" + teamMember));
+            channel.writeAndFlush(new ResultMessage(Constant.MESSAGE_TEAM_JOIN_RETURN, teamId + ":" + teamMember));
         }
         // 给自己发送成功 只需要teamId即可
-        return new ResultMessage(ConstantDefine.MESSAGE_TEAM_QUIT_RETURN, teamId);
+        return new ResultMessage(Constant.MESSAGE_TEAM_QUIT_RETURN, teamId);
     }
 
 }// end

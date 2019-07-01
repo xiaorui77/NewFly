@@ -1,6 +1,6 @@
 package com.newfly.service;
 
-import com.newfly.common.ConstantDefine;
+import com.newfly.common.Constant;
 import com.newfly.common.SocketChannelMap;
 import com.newfly.dao.PlayerRedis;
 import com.newfly.dao.SceneRedis;
@@ -77,7 +77,7 @@ public class ChatService
         players.remove(playerId);
         for (String curId : players) {
             String content = channelId + ":" + playerId + ":" + sendName + ":" + message;
-            SocketChannelMap.sendTo(curId, ConstantDefine.MESSAGE_CHAT_PUBLIC_RETURN, content);
+            SocketChannelMap.sendTo(curId, Constant.MESSAGE_CHAT_PUBLIC_RETURN, content);
         }
         return null;
     }
@@ -91,7 +91,7 @@ public class ChatService
 
         // 找到目标玩家的channel
         Channel channel = SocketChannelMap.get(targetId);
-        ResultMessage result = new ResultMessage(ConstantDefine.MESSAGE_CHAT_PRIVATE_RETURN, playerId + ":" + message);
+        ResultMessage result = new ResultMessage(Constant.MESSAGE_CHAT_PRIVATE_RETURN, playerId + ":" + message);
 
         // 在线:直接发送; 不在线,存入数据库
         if (channel != null) {

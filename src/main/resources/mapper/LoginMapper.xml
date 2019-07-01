@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.newfly.mapper.LoginMapper">
+
+    <!-- 用户登录-->
+    <select id="login" parameterType="user" resultType="user">
+        select id, username, last_player, player_num, create_time
+        from user
+        where username = #{username}
+          AND password = #{password}
+    </select>
+
+    <!-- 获取user所有的playerId-->
+    <select id="queryPlayerIds" parameterType="int" resultType="int">
+        select id
+        from player
+        where user_id = #{id}
+    </select>
+
+    <!-- 设置上次登录-->
+    <update id="updateLastPlayer" parameterType="int">
+        update user
+        set last_player = #{lastPlayer}
+        where id = #{id}
+    </update>
+
+</mapper>

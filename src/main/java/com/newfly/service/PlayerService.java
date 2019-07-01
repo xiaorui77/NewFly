@@ -1,10 +1,13 @@
 package com.newfly.service;
 
-import com.newfly.common.ConstantDefine;
+import com.newfly.common.Constant;
 import com.newfly.common.SocketChannelMap;
 import com.newfly.dao.PlayerRedis;
 import com.newfly.dao.SceneRedis;
+import com.newfly.mapper.PlayerMapper;
+import com.newfly.pojo.Player;
 import com.newfly.pojo.ResultMessage;
+import com.newfly.pojo.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +24,63 @@ public class PlayerService
     PlayerRedis playerRedis;
 
     @Autowired
+    PlayerMapper playerMapper;
+
+    @Autowired
     SceneRedis sceneRedis;
+
+
+    // 获取玩家基本信息
+    public Player queryPlayer(int playerId) {
+        return playerMapper.queryPlayer(playerId);
+    }
+
+    // 获取玩家主线任务进度信息
+    public Task queryMainTask(int playerId) {
+        return playerMapper.queryTask(playerId);
+    }
+
+    // 从redis中读取玩家信息
+    public Player getPlayer(String playerId) {
+        return playerRedis.getPlayer(playerId);
+    }
+
+    // 从redis中读取玩家主线任务
+    public Task getMainTask(String playerId) {
+        return playerRedis.getMainTask(playerId);
+    }
+
+    // 更新player到mysql中
+    public void updatePlayer(Player player) {
+        playerMapper.updatePlayer(player);
+    }
+
+    // 更新玩家主线任务到mysql
+    public void updateMainTask(Task task) {
+        playerMapper.updateMainTask(task);
+    }
+
+    // 保存character信息到redis中
+    public void savePlayer(Player player, Task task) {
+        // 保存用户信息
+        playerRedis.savePlayer(player);
+
+        // 保存用户主线任务信息
+        playerRedis.saveMainTask(task);
+
+        // 保存世界和场景信息
+        String playerId = String.valueOf(player.getId());
+        String sceneId = String.valueOf(player.getScene());
+        sceneRedis.add(playerId, sceneId);
+    }
+
+    // 从redis中移除角色信息
+    public void removePlayer(String playerId) {
+        playerRedis.removePlayer(playerId);
+    }
+
+
+
 
 
     // 获取(所有)玩家信息
@@ -53,7 +112,7 @@ public class PlayerService
 
         for (Map<String, String> p : players) {
             String playerString = p.get("id") + ":" + p.get("name") + ":" + p.get("profession") + ":" + p.get("grade");
-            SocketChannelMap.sendTo(p.get("id"), ConstantDefine.MESSAGE_PLAYER_INFO_RETURN, playerString);
+            SocketChannelMap.sendTo(p.get("id"), Constant.MESSAGE_PLAYER_INFO_RETURN, playerString);
         }
         return null;
     }

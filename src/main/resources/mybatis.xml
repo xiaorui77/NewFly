@@ -12,11 +12,16 @@
         </plugin>
     </plugins>-->
 
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
     <!-- 定义别名-->
     <typeAliases>
         <typeAlias type="com.newfly.pojo.Player" alias="player"/>
         <typeAlias type="com.newfly.pojo.Message" alias="message"/>
         <typeAlias type="com.newfly.pojo.Task" alias="task"/>
+        <typeAlias type="com.newfly.pojo.User" alias="user"/>
     </typeAliases>
 
 </configuration>

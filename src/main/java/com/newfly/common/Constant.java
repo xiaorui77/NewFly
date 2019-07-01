@@ -1,22 +1,31 @@
 package com.newfly.common;
 
-public class ConstantDefine
+public class Constant
 {
     // 3.用户,玩家 3000
-    private static final int MESSAGE_PLAYER = 3000;
-    // 玩家登录
-    public static final int MESSAGE_PLAYER_LOGIN = MESSAGE_PLAYER + 111;
-    public static final int MESSAGE_PLAYER_LOGIN_RETURN = MESSAGE_PLAYER + 112;
-    // 玩家退出
-    public static final int MESSAGE_PLAYER_LOGOUT = MESSAGE_PLAYER + 113;
-    public static final int MESSAGE_PLAYER_LOGOUT_RETURN = MESSAGE_PLAYER + 114;
+    private static final int PLAYER = 3000;
+    // 用户登录
+    public static final int USER_LOGIN = PLAYER + 111;
+    public static final int USER_LOGIN_RETURN = PLAYER + 112;
+    // 用户退出
+    public static final int MESSAGE_USER_LOGOUT = PLAYER + 113;
+    public static final int MESSAGE_USER_LOGOUT_RETURN = PLAYER + 114;
+
+    // 选择玩家
+    public static final int MESSAGE_PLAYER_SELECT = PLAYER + 121;
+    public static final int MESSAGE_PLAYER_SELECT_RESULT = PLAYER + 122;
+
+    // 退出玩家
+    public static final int MESSAGE_PLAYER_QUIT = PLAYER + 123;
+    public static final int MESSAGE_PLAYER_QUIT_RETURN = PLAYER + 124;
+
 
     // 获取玩家列表
-    public static final int MESSAGE_PLAYER_QUERY = MESSAGE_PLAYER + 211;
-    public static final int MESSAGE_PLAYER_QUERY_RETURN = MESSAGE_PLAYER + 212;
+    public static final int MESSAGE_PLAYER_QUERY = PLAYER + 211;
+    public static final int MESSAGE_PLAYER_QUERY_RETURN = PLAYER + 212;
     // 玩家详细信息
-    public static final int MESSAGE_PLAYER_INFO = MESSAGE_PLAYER + 213;
-    public static final int MESSAGE_PLAYER_INFO_RETURN = MESSAGE_PLAYER + 214;
+    public static final int MESSAGE_PLAYER_INFO = PLAYER + 213;
+    public static final int MESSAGE_PLAYER_INFO_RETURN = PLAYER + 214;
 
 
     // 4.聊天,队伍等 4000

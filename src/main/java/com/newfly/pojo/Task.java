@@ -5,7 +5,7 @@ public class Task
     private static Integer[] subNums;
 
     private int id;
-    private int taskId;
+    private int task;
     private int subTask;
 
 
@@ -17,8 +17,8 @@ public class Task
         return id;
     }
 
-    public int getTaskId() {
-        return taskId;
+    public int getTask() {
+        return task;
     }
 
     public int getSubTask() {
@@ -30,8 +30,8 @@ public class Task
         this.id = id;
     }
 
-    public void setTaskId(int taskId) {
-        this.taskId = taskId;
+    public void setTask(int task) {
+        this.task = task;
     }
 
     public void setSubTask(int subTask) {
@@ -41,7 +41,7 @@ public class Task
 
     // 是否可以变化 任务阶段
     public boolean changeTask(String taskId, String subTaskId) {
-        int a = this.taskId;
+        int a = this.task;
         int b = this.subTask + 1;
         if (b > subNums[a]) {
             a++;

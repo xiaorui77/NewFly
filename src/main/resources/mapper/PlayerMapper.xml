@@ -4,26 +4,54 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.newfly.mapper.PlayerMapper">
 
-    <!-- 查询用户名和密码-->
-    <select id="login" parameterType="player" resultType="player">
+    <!-- 查询用户基本信息-->
+    <select id="queryPlayer" parameterType="int" resultType="player">
         select id,
                name,
+               user_id,
                profession,
                grade,
-               scene,
                exp,
                money,
+               scene,
                x,
-               y
+               y,
+               DATE_FORMAT(create_time, '%Y-%m-%d %H:%i:%s') as createTime
         from player
-        where name = #{name}
-          and password = #{password}
+        where id = #{id}
     </select>
 
     <!-- 查询任务-->
-    <select id="queryTask" parameterType="string" resultType="task">
+    <select id="queryTask" parameterType="int" resultType="task">
         select id, task, sub_task
         from player
         where id = #{id}
     </select>
+
+
+    <!-- 更新玩家数据-->
+    <update id="updatePlayer" parameterType="player">
+        UPDATE player
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name!=null and name!=''">name = #{name},</if>
+            <if test="profession!=null and profession!=''">profession = #{profession},</if>
+            <if test="grade!=null and grade!=''">grade = #{grade},</if>
+            <if test="exp!=null and exp!=''">exp = #{exp},</if>
+            <if test="money!=null and money!=''">money = #{money},</if>
+            <if test="scene!=null and scene!=''">scene = #{scene},</if>
+            <if test="x!=null and x!=''">x = #{x},</if>
+            <if test="y!=null and y!=''">y = #{y},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <!-- 更新主线任务进度-->
+    <update id="updateMainTask" parameterType="task">
+        UPDATE player
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="task!=null and task!=''">task = #{task},</if>
+            <if test="sub_task!=null and sub_task!=''">sub_task = #{sub_task},</if>
+        </trim>
+        WHERE id =#{id}
+    </update>
 </mapper>

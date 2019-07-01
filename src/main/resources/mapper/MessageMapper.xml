@@ -6,7 +6,7 @@
 
     <!-- 添加数据-->
     <insert id="save" parameterType="message">
-        insert into message(`from`, target, title, `body`, create_time
+        insert into message(`from`, target, title, `body`, createTime
         )
         values (#{from}, #{target}, #{title}, #{body}, current_timestamp)
     </insert>

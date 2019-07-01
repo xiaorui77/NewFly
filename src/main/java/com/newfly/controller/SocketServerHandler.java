@@ -17,11 +17,13 @@ public class SocketServerHandler extends SimpleChannelInboundHandler<Object>
 
     // 初始化时获取
     private static ServerController serverController;
+    private static LoginController loginController;
 
 
     static {
         ApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
         serverController = (ServerController) context.getBean("serverController");
+        loginController = (LoginController) context.getBean("loginController");
     }
 
     @Override
@@ -34,15 +36,22 @@ public class SocketServerHandler extends SimpleChannelInboundHandler<Object>
         super.channelRead(ctx, msg);
     }
 
-
-
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object o) {
         ResultMessage msg = (ResultMessage) o;
         logger.info("收到消息 type=" + msg.getType() + " body=>" + msg.getBody());
         // logger.info("Controller:" + serverController);
 
-        ResultMessage result = serverController.handle(ctx, msg);
+        // 将处理分到不同的Controller上
+        int type = msg.getType();
+        ResultMessage result;
+        // 判断用哪个controller处理
+        if (type / 1000 == 3) {
+            result = loginController.handle(ctx, msg);
+        } else {
+            result = serverController.handle(ctx, msg);
+        }
+
         if (result != null)
             ctx.writeAndFlush(result);
     }

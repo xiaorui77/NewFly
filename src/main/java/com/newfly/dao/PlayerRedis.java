@@ -2,6 +2,7 @@ package com.newfly.dao;
 
 
 import com.newfly.pojo.Player;
+import com.newfly.pojo.Task;
 import org.springframework.stereotype.Repository;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -19,7 +20,7 @@ public class PlayerRedis
     }
 
 
-    // 设置玩家信息, key为玩家id
+    // 设置玩家信息, 只能保存从mysql中读取的
     public void savePlayer(Player player) {
         Jedis jedis = jedisPool.getResource();
         String strID = "player:" + player.getId();
@@ -52,6 +53,26 @@ public class PlayerRedis
         return playerInfo;
     }
 
+    // 获取玩家信息, Player对象形式
+    public Player getPlayer(String playerId) {
+        Jedis jedis = jedisPool.getResource();
+        String strId = "player:" + playerId;
+        Player player = new Player();
+        jedis.hget(strId, "id");
+        jedis.hget(strId, "name");
+        jedis.hget(strId, "profession");
+        jedis.hget(strId, "grade");
+        jedis.hget(strId, "exp");
+        jedis.hget(strId, "money");
+        jedis.hget(strId, "scene");
+        jedis.hget(strId, "x");
+        jedis.hget(strId, "y");
+        jedis.hget(strId, "y");
+        jedis.hget(strId, "create_time");
+        jedis.close();
+        return player;
+    }
+
     // 获取玩家信息 字符串形式
     public String playerInfo(String playerId) {
         Jedis jedis = jedisPool.getResource();
@@ -70,6 +91,35 @@ public class PlayerRedis
         jedis.close();
         return exist;
     }
+
+
+    // 保存玩家主线任务进度
+    public void saveMainTask(Task task) {
+        Jedis jedis = jedisPool.getResource();
+        jedis.hset("player:" + task.getId(), "task", String.valueOf(task.getTask()));
+        jedis.hset("player:" + task.getId(), "sub_task", String.valueOf(task.getSubTask()));
+        jedis.close();
+    }
+
+    // 查询玩家主线任务进度, id字段是多用的,这里表示玩家ID
+    public Task getMainTask(String playerId) {
+        Jedis jedis = jedisPool.getResource();
+        Task task = new Task();
+        task.setId(Integer.parseInt(playerId));
+        task.setTask(Integer.parseInt(jedis.hget("player:" + playerId, "task")));
+        task.setSubTask(Integer.parseInt(jedis.hget("player:" + playerId, "sub_task")));
+        jedis.close();
+        return task;
+    }
+
+    // 更新玩家主线任务进度
+    public void changeMainTask(String playerId, String task, String subTask) {
+        Jedis jedis = jedisPool.getResource();
+        jedis.hset("player:" + playerId, "task", task);
+        jedis.hset("player:" + playerId, "sub_task", subTask);
+        jedis.close();
+    }
+
 
     // 是否是队长
     public boolean isCaptain(String playerId) {

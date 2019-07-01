@@ -26,7 +26,7 @@ public class SocketServer
     // 每个线程组中线程的数量
     private static final int WORK_GROUP_SIZE = 4;
 
-    private static EventLoopGroup bossGroup = new NioEventLoopGroup(BIS_GROUP_SIZE);
+    private static EventLoopGroup bossGroup = new NioEventLoopGroup(1);
     private static EventLoopGroup workerGroup = new NioEventLoopGroup(WORK_GROUP_SIZE);
 
     private void run() throws Exception {

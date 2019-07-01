@@ -4,7 +4,7 @@ public class Player
 {
     private int id;
     private String name;
-    private String password;
+    private int userId;
     private int profession; // 职业
     private int grade;  // 等级
     private int exp;    // 经验
@@ -12,15 +12,11 @@ public class Player
     private int scene;  // 场景
     private int x;
     private int y;
-    private String create_time;
+    private String createTime;
 
     public Player() {
     }
 
-    public Player(String name, String password) {
-        this.name = name;
-        this.password = password;
-    }
 
     public int getId() {
         return id;
@@ -30,8 +26,8 @@ public class Player
         return name;
     }
 
-    public String getPassword() {
-        return password;
+    public int getUserId() {
+        return userId;
     }
 
     public int getProfession() {
@@ -62,8 +58,8 @@ public class Player
         return y;
     }
 
-    public String getCreate_time() {
-        return create_time;
+    public String getCreateTime() {
+        return createTime;
     }
 
 
@@ -75,8 +71,8 @@ public class Player
         this.name = name;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public void setProfession(int profession) {
@@ -107,24 +103,13 @@ public class Player
         this.y = y;
     }
 
-    public void setCreate_time(String create_time) {
-        this.create_time = create_time;
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 
-    @Override
-    public String toString() {
-        return "Player{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
-                ", profession=" + profession +
-                ", grade=" + grade +
-                ", exp=" + exp +
-                ", money=" + money +
-                ", scene=" + scene +
-                ", x=" + x +
-                ", y=" + y +
-                ", create_time='" + create_time + '\'' +
-                '}';
+
+    // 转为字符串类型
+    public String toResult() {
+        return id + ":" + name + ":" + profession + ":" + grade + ":" + exp + ":" + money + ":" + scene + ":" + x + ":" + y;
     }
 }

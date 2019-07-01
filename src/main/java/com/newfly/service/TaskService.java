@@ -1,7 +1,7 @@
 package com.newfly.service;
 
-import com.newfly.common.ConstantDefine;
-import com.newfly.dao.TaskRedis;
+import com.newfly.common.Constant;
+import com.newfly.dao.PlayerRedis;
 import com.newfly.mapper.GameInfoMapper;
 import com.newfly.mapper.PlayerMapper;
 import com.newfly.pojo.ResultMessage;
@@ -26,7 +26,7 @@ public class TaskService
     GameInfoMapper gameInfoMapper;
 
     @Autowired
-    TaskRedis taskRedis;
+    PlayerRedis playerRedis;
 
 
     /*
@@ -55,11 +55,11 @@ public class TaskService
         String subTaskId = strings[2];
 
         // 获取玩家已经完成的任务
-        Task task = taskRedis.getMainTask(playerId);
+        Task task = playerRedis.getMainTask(playerId);
         if (task.changeTask(taskId, subTaskId)) {
             // 保存到数据库并返回
-            taskRedis.changeMainTask(playerId, taskId, subTaskId);
-            return new ResultMessage(ConstantDefine.MESSAGE_TASK_CHANGE_RETURN, msg.getBody());
+            playerRedis.changeMainTask(playerId, taskId, subTaskId);
+            return new ResultMessage(Constant.MESSAGE_TASK_CHANGE_RETURN, msg.getBody());
         }
         return null;
     }
@@ -72,13 +72,12 @@ public class TaskService
         String method = strings[1];
 
         if (method.equals("main")) {
-
-            Task task = taskRedis.getMainTask(playerId);
-            String taskString = task.getTaskId() + ":" + task.getSubTask();
-            return new ResultMessage(ConstantDefine.MESSAGE_TASK_QUERY_RETURN, taskString);
+            Task task = playerRedis.getMainTask(playerId);
+            String taskString = task.getTask() + ":" + task.getSubTask();
+            return new ResultMessage(Constant.MESSAGE_TASK_QUERY_RETURN, taskString);
         } else if (method.equals("all")) {
             return null;
-        }else {
+        } else {
             return null;
         }
     }
@@ -102,9 +101,9 @@ public class TaskService
         String taskId = strings[1];
         String subTaskId = strings[2];
 
-        Task task = playerMapper.queryTask(playerId);
+        Task task = new Task();
         if (task.Completable(taskId, subTaskId))
-            return new ResultMessage(ConstantDefine.MESSAGE_TASK_CHANGE_RETURN, msg.getBody());
+            return new ResultMessage(Constant.MESSAGE_TASK_CHANGE_RETURN, msg.getBody());
 
         // 修改完成状态
 

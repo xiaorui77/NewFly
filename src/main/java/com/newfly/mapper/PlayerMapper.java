@@ -5,7 +5,15 @@ import com.newfly.pojo.Task;
 
 public interface PlayerMapper
 {
-    Player login(Player player);
+    // 查询玩家信息
+    Player queryPlayer(int id);
 
-    Task queryTask(String id);
+    // 查询玩家主线任务进度
+    Task queryTask(int id);
+
+    // 保存玩家数据
+    void updatePlayer(Player player);
+
+    // 更新主线任务进度
+    void updateMainTask(Task task);
 }

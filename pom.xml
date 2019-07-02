@@ -89,6 +89,19 @@
             <version>3.3.2</version>
         </dependency>
 
+        <!-- kafka消息队列-->
+        <dependency>
+            <groupId>org.springframework.integration</groupId>
+            <artifactId>spring-integration-kafka</artifactId>
+            <version>2.0.0.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
         <!-- mybatis-->
         <dependency>
             <groupId>org.mybatis</groupId>

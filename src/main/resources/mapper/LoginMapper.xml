@@ -19,6 +19,14 @@
         where user_id = #{id}
     </select>
 
+
+    <!-- 查询上次登录-->
+    <select id="queryLastPlayer" parameterType="int" resultType="int">
+        select last_player
+        from user
+        where id = #{id}
+    </select>
+
     <!-- 设置上次登录-->
     <update id="updateLastPlayer" parameterType="int">
         update user

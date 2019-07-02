@@ -42,13 +42,21 @@ public class LoginService
         List<Integer> list = loginMapper.queryPlayerIds(userId);
         if (!list.contains(charId))
             return 0;
+        return charId;
+    }
 
+    // 获取上次登录
+    public int queryLastPlayer(int user) {
+        return loginMapper.queryLastPlayer(user);
+    }
+
+    // 更新上次登录
+    public void updateLaetPlayer(int userId, int playerId) {
         // 保存本次登录
         User user = new User();
         user.setId(userId);
-        user.setId(charId);
+        user.setId(playerId);
         loginMapper.updateLastPlayer(user);
-        return charId;
     }
 
 }// end

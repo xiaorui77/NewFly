@@ -27,6 +27,7 @@ public class BattleService
         String status = battleRedis.getSingle(originatorId, "status");
         if (status == null)
             return null;
+        return null;
     }
 
 }// end

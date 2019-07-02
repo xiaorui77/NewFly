@@ -21,6 +21,23 @@ public class SocketChannelMap
         return map.get(clientId);
     }
 
+    // 通过channel找到player, 找不到返回null
+    public static String findKey(Channel channel) {
+        for (Map.Entry entry : map.entrySet()) {
+            if (entry.getValue() == channel) {
+                return String.valueOf(entry.getKey());
+            }
+        }
+        return null;
+    }
+
+
+    // 通过string移除
+    public static void remove(String clientId) {
+        map.remove(clientId);
+    }
+
+    // 通过channel移除
     public static void remove(SocketChannel socketChannel) {
         for (Map.Entry entry : map.entrySet()) {
             if (entry.getValue() == socketChannel) {

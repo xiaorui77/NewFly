@@ -58,7 +58,10 @@ public class Constant
     public static final int MESSAGE_MAP_PLAYER_MOVE_RETURN = MESSAGE_MAP + 112;
 
 
-    // 6.保留 5000
+    // 6.战斗 6000
+    private static final int BATTLE = 6000;
+    public static final int BATTLE_SINGLE = BATTLE + 111;
+    public static final int BATTLE_SINGLE_RETURN = BATTLE + 112;
 
 
     // 7.物品,背包,市场 7000

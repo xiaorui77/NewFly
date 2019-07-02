@@ -13,16 +13,16 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class SocketServerHandler extends SimpleChannelInboundHandler<Object>
 {
-    private static final Logger logger = LoggerFactory.getLogger(SocketServer.class);
+    private static final Logger logger = LoggerFactory.getLogger(NewFlyServer.class);
 
     // 初始化时获取
-    private static ServerController serverController;
+    private static GameController gameController;
     private static LoginController loginController;
 
 
     static {
         ApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
-        serverController = (ServerController) context.getBean("serverController");
+        gameController = (GameController) context.getBean("gameController");
         loginController = (LoginController) context.getBean("loginController");
     }
 
@@ -49,7 +49,7 @@ public class SocketServerHandler extends SimpleChannelInboundHandler<Object>
         if (type / 1000 == 3) {
             result = loginController.handle(ctx, msg);
         } else {
-            result = serverController.handle(ctx, msg);
+            result = gameController.handle(ctx, msg);
         }
 
         if (result != null)
@@ -65,6 +65,9 @@ public class SocketServerHandler extends SimpleChannelInboundHandler<Object>
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         logger.info("与客户端连接断开");
+
+        // 异常退出
+        loginController.close(ctx);
         SocketChannelMap.remove((SocketChannel) ctx.channel()); // 删除channel
         super.channelInactive(ctx);
     }

@@ -13,9 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class SocketServer
+public class NewFlyServer
 {
-    private static final Logger logger = LoggerFactory.getLogger(SocketServer.class);
+    private static final Logger logger = LoggerFactory.getLogger(NewFlyServer.class);
     private static final String IP = "127.0.0.1";
     //private static final String IP = "172.30.192.163";
     private static final int PORT = 9600;
@@ -58,7 +58,7 @@ public class SocketServer
     public static void main(String[] args) throws Exception {
         logger.info("开始启动Socket服务器...");
         logger.info("监听IP:" + IP + " Port=" + PORT);
-        new SocketServer().run();
+        new NewFlyServer().run();
     }
 
 }

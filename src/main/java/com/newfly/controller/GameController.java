@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 
 
 @Controller
-public class ServerController
+public class GameController
 {
 
     private final PlayerService playerService;
@@ -21,7 +21,7 @@ public class ServerController
 
     private final TaskService taskService;
 
-    public ServerController( PlayerService playerService, ChatService chatPublic, MapSceneService mapService, TeamService teamService, TaskService taskService) {
+    public GameController(PlayerService playerService, ChatService chatPublic, MapSceneService mapService, TeamService teamService, TaskService taskService) {
         this.playerService = playerService;
         this.chatPublic = chatPublic;
         this.mapService = mapService;

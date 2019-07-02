@@ -43,9 +43,7 @@ public class LoginController
 
             if (type == requestType.value()) {
                 try {
-                    if (method.getName().equals("login"))
-                        return login(ctx, msg);
-                    return (ResultMessage) method.invoke(this, msg);
+                    return (ResultMessage) method.invoke(this, ctx, msg);
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                     return null;
@@ -72,19 +70,26 @@ public class LoginController
             return null;
         }
 
-        // 保存SocketChannel
-        SocketChannelMap.add(String.valueOf(user.getId()), (SocketChannel) ctx.channel());
+        // 选择角色
 
         // 由于客户端的原因 这里自动选择默认角色1
-        ResultMessage result = selectPlayer(new ResultMessage(3133, user.getId() + ":" + user.getLastPlayer()));
+        ResultMessage result = selectPlayer(ctx, new ResultMessage(3133, user.getId() + ":" + user.getLastPlayer()));
         result.setType(Constant.USER_LOGIN_RETURN);
         return result;
     }
 
-    // 用户退出 同步player数据 未实现
+    // 用户正常退出 同步player数据 未实现
     @RequestType(Constant.MESSAGE_USER_LOGOUT)
-    private ResultMessage logout(ResultMessage msg) {
-        // 用户退出
+    private ResultMessage logout(ChannelHandlerContext ctx, ResultMessage msg) {
+        // 分离数据
+        String[] strings = msg.getBody().split(":");
+        String userId = strings[0];
+
+        // 退出player
+        int lastPlayerId = loginService.queryLastPlayer(Integer.parseInt(userId));
+        quitPlayer(ctx, new ResultMessage(Constant.MESSAGE_PLAYER_QUIT, String.valueOf(lastPlayerId)));
+
+        // 其他操作
 
         return null;
     }
@@ -92,7 +97,7 @@ public class LoginController
 
     // 选择player
     @RequestType(Constant.MESSAGE_PLAYER_SELECT)
-    private ResultMessage selectPlayer(ResultMessage msg) {
+    private ResultMessage selectPlayer(ChannelHandlerContext ctx, ResultMessage msg) {
         // 分离数据
         String[] strings = msg.getBody().split(":");
         String userId = strings[0];
@@ -100,6 +105,10 @@ public class LoginController
 
         // 选择角色
         int character = loginService.selectCharacter(Integer.parseInt(userId), Integer.parseInt(charId));
+        loginService.updateLaetPlayer(Integer.parseInt(userId), Integer.parseInt(charId));
+
+        // 保存SocketChannel
+        SocketChannelMap.add(charId, (SocketChannel) ctx.channel());
 
         // 获取选择的角色信息并保存到Redis
         Player player = playerService.queryPlayer(character);
@@ -115,7 +124,7 @@ public class LoginController
 
     // 退出player 未实现
     @RequestType(Constant.MESSAGE_PLAYER_QUIT)
-    private ResultMessage quitPlayer(ResultMessage msg) {
+    private ResultMessage quitPlayer(ChannelHandlerContext ctx, ResultMessage msg) {
         // 分离数据
         String[] strings = msg.getBody().split(":");
         String playerId = strings[0];
@@ -137,8 +146,16 @@ public class LoginController
         // 退出世界场景
         mapSceneService.removePlayer(playerId, String.valueOf(player.getScene()));
 
+        // 移除player的连接
+        SocketChannelMap.remove(playerId);
+
         return null;
     }
 
+    // 异常退出
+    void close(ChannelHandlerContext ctx) {
+        String id = SocketChannelMap.findKey(ctx.channel());
+        quitPlayer(ctx, new ResultMessage(Constant.MESSAGE_PLAYER_QUIT, id));
+    }
 
 }// end

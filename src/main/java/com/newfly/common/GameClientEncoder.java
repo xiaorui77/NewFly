@@ -1,6 +1,6 @@
 package com.newfly.common;
 
-import com.newfly.controller.SocketServer;
+import com.newfly.controller.NewFlyServer;
 import com.newfly.pojo.ResultMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 public class GameClientEncoder extends MessageToByteEncoder<ResultMessage>
 {
-    private static final Logger logger = LoggerFactory.getLogger(SocketServer.class);
+    private static final Logger logger = LoggerFactory.getLogger(NewFlyServer.class);
 
     @Override
     protected void encode(ChannelHandlerContext ctx, ResultMessage msg, ByteBuf out) throws Exception {

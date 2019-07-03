@@ -45,7 +45,7 @@ public class BattleService
     public String enterSingle(String playerId, String monsterId) {
         String status = battleRedis.getSingle(playerId, "status");
         if (status != null)
-            return playerId+":已经开始战斗!";
+            return playerId + ":已经开始战斗!";
         // 初始化战斗信息
         Combat player = playerRedis.getCombat(playerId);
         Combat monster = battleRedis.getMonster(monsterId);
@@ -72,19 +72,19 @@ public class BattleService
 
         // 如果生效
         if ((r & 0x1) != 0) {
-            SocketChannelMap.sendTo(battleId, Constant.BATTLE_ABILITY_SELECT_RETURN, originId + ":" + abilityId + ":" + targetId);
-
             // 被攻击方状态变化
             battleRedis.setUnit(battleId, targetId, target);
-            statusBroadcast(battleId, targetId + ":status:" + target.getHp() + ":" + target.getSp());
+
+            // 攻击方状态变化
+            if ((r & 0x2) != 0) {
+                battleRedis.setUnit(battleId, originId, origin);
+                //statusBroadcast(battleId, originId + ":status:" + origin.getHp() + ":" + origin.getSp());
+            }
+
+            // 广播回合结果
+            resultBroadcast(battleId, originId + ":" + abilityId + ":" + targetId + ":" + target.getHp() + ":" + target.getSp() + ":" + origin.getHp() + ":" + origin.getSp());
         } else {
             return true;
-        }
-
-        // 攻击方状态变化
-        if ((r & 0x2) != 0) {
-            battleRedis.setUnit(battleId, originId, origin);
-            statusBroadcast(battleId, originId + ":status:" + origin.getHp() + ":" + origin.getSp());
         }
 
         // 有角色死亡
@@ -103,7 +103,7 @@ public class BattleService
                 return false;
             } else if (battleRedis.getTotalHp(battleId, "monster") <= 0) {
                 // 广播信息
-                finishBroadcast(battleId, "victory:100:100");
+                finishBroadcast(battleId, "victory:100:100:0");
 
                 // 移除redis
                 battleRedis.setStatus(battleId, "victory");
@@ -121,6 +121,11 @@ public class BattleService
     // 是否结束战斗
     private boolean finish() {
         return false;
+    }
+
+    // 回合结果广播
+    private void resultBroadcast(String teamId, String content) {
+        SocketChannelMap.sendTo(teamId, Constant.BATTLE_ABILITY_SELECT_RETURN, content);
     }
 
     // 状态信息广播

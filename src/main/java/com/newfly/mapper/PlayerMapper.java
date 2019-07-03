@@ -20,4 +20,7 @@ public interface PlayerMapper
 
     // 更新主线任务进度
     void updateMainTask(Task task);
+
+    // 更新玩家战斗信息
+    void updateCombat(Combat combat);
 }

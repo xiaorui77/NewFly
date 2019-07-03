@@ -14,7 +14,7 @@ public interface LoginMapper
 
 
     // 获取上次选择的player
-    int queryLastPlayer(int userID);
+    Integer queryLastPlayer(int userId);
 
     // 设置上次选择的player
     void updateLastPlayer(User user);

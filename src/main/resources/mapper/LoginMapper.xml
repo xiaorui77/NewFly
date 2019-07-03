@@ -13,7 +13,7 @@
     </select>
 
     <!-- 获取user所有的playerId-->
-    <select id="queryPlayerIds" parameterType="int" resultType="int">
+    <select id="queryPlayerIds" parameterType="int" resultType="Integer">
         select id
         from player
         where user_id = #{id}
@@ -21,10 +21,10 @@
 
 
     <!-- 查询上次登录-->
-    <select id="queryLastPlayer" parameterType="int" resultType="int">
+    <select id="queryLastPlayer" parameterType="int" resultType="Integer">
         select last_player
         from user
-        where id = #{id}
+        where id = #{userId}
     </select>
 
     <!-- 设置上次登录-->

@@ -22,15 +22,15 @@ public class MapSceneService
 
 
     // 保存世界场景信息
-    public void addPlayer(String playerId,String sceneId){
+    public void addPlayer(String playerId, String sceneId) {
         sceneRedis.add(playerId, sceneId);
     }
 
     // 移除
-    public void removePlayer(String playerId,String sceneId) {
+    public void removePlayer(String playerId) {
+        String sceneId = playerRedis.getScene(playerId);
         sceneRedis.remove(playerId, sceneId);
     }
-
 
 
     // 玩家移动
@@ -56,6 +56,9 @@ public class MapSceneService
         }
         // 添加新场景的所有玩家
         players.addAll(sceneRedis.sceneMember(sceneId));
+
+        // 移除自己
+        players.remove(playerId);
 
         String content = msg.getBody();
         SocketChannelMap.sendAll(players, Constant.MESSAGE_MAP_PLAYER_MOVE_RETURN, content);

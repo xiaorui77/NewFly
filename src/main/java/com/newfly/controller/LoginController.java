@@ -5,13 +5,14 @@ import com.newfly.common.RequestType;
 import com.newfly.common.SocketChannelMap;
 import com.newfly.pojo.Player;
 import com.newfly.pojo.ResultMessage;
-import com.newfly.pojo.Task;
 import com.newfly.pojo.User;
 import com.newfly.service.LoginService;
 import com.newfly.service.MapSceneService;
 import com.newfly.service.PlayerService;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.SocketChannel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -21,6 +22,8 @@ import java.lang.reflect.Method;
 @Controller
 public class LoginController
 {
+    private static final Logger logger = LoggerFactory.getLogger(NewFlyServer.class);
+
     @Autowired
     LoginService loginService;
 
@@ -86,7 +89,7 @@ public class LoginController
         String userId = strings[0];
 
         // 退出player
-        int lastPlayerId = loginService.queryLastPlayer(Integer.parseInt(userId));
+        Integer lastPlayerId = loginService.queryLastPlayer(Integer.parseInt(userId));
         quitPlayer(ctx, new ResultMessage(Constant.MESSAGE_PLAYER_QUIT, String.valueOf(lastPlayerId)));
 
         // 其他操作
@@ -115,6 +118,8 @@ public class LoginController
         // 保存世界和场景信息
         mapSceneService.addPlayer(charId, String.valueOf(character.getScene()));
 
+        logger.info("用户:" + character.getName() + "(id:" + charId + ")已经登录!");
+
         // 数据返回
         return new ResultMessage(Constant.MESSAGE_PLAYER_SELECT_RESULT, character.toResult());
     }
@@ -126,26 +131,21 @@ public class LoginController
         String[] strings = msg.getBody().split(":");
         String playerId = strings[0];
 
-        // 从redis中获取player数据
-        Player player = playerService.getPlayer(playerId);
-        Task mainTask = playerService.getMainTask(playerId);
-
-        // 保存到数据库
-        playerService.updatePlayer(player);
-        playerService.updateMainTask(mainTask);
-
-        // 从redis中移除相关字段
-        playerService.removePlayer(playerId);
+        // 从redis中读取数据并保存到mysql
+        loginService.savePlayerToMysql(playerId);
 
         // 退出队伍
 
 
         // 退出世界场景
-        mapSceneService.removePlayer(playerId, String.valueOf(player.getScene()));
+        mapSceneService.removePlayer(playerId);
+
+        // 从redis中移除相关字段
+        playerService.removePlayer(playerId);
 
         // 移除player的连接
         SocketChannelMap.remove(playerId);
-
+        logger.info("用户:" + playerId + " 已经退出!");
         return null;
     }
 

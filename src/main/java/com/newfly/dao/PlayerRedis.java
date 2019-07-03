@@ -59,17 +59,16 @@ public class PlayerRedis
         Jedis jedis = jedisPool.getResource();
         String strId = "player:" + playerId;
         Player player = new Player();
-        jedis.hget(strId, "id");
-        jedis.hget(strId, "name");
-        jedis.hget(strId, "profession");
-        jedis.hget(strId, "grade");
-        jedis.hget(strId, "exp");
-        jedis.hget(strId, "money");
-        jedis.hget(strId, "scene");
-        jedis.hget(strId, "x");
-        jedis.hget(strId, "y");
-        jedis.hget(strId, "y");
-        jedis.hget(strId, "create_time");
+        player.setId(Integer.parseInt(jedis.hget(strId, "id")));
+        player.setName(jedis.hget(strId, "name"));
+        player.setProfession(Integer.parseInt(jedis.hget(strId, "profession")));
+        player.setGrade(Integer.parseInt(jedis.hget(strId, "grade")));
+        player.setExp(Integer.parseInt(jedis.hget(strId, "exp")));
+        player.setMoney(Integer.parseInt(jedis.hget(strId, "money")));
+        player.setScene(Integer.parseInt(jedis.hget(strId, "scene")));
+        player.setX(Integer.parseInt(jedis.hget(strId, "x")));
+        player.setY(Integer.parseInt(jedis.hget(strId, "y")));
+        player.setCreateTime(jedis.hget(strId, "create_time"));
         jedis.close();
         return player;
     }

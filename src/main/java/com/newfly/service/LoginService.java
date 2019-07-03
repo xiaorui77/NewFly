@@ -67,8 +67,8 @@ public class LoginService
 
 
     // 获取上次登录
-    public int queryLastPlayer(int user) {
-        return loginMapper.queryLastPlayer(user);
+    public Integer queryLastPlayer(int userId) {
+        return loginMapper.queryLastPlayer(userId);
     }
 
     // 更新上次登录
@@ -78,6 +78,17 @@ public class LoginService
         user.setId(userId);
         user.setId(playerId);
         loginMapper.updateLastPlayer(user);
+    }
+
+    // 保存redis中player信息到mysql
+    public void savePlayerToMysql(String playerId) {
+        Player player = playerRedis.getPlayer(playerId);
+        Task mainTask = playerRedis.getMainTask(playerId);
+        Combat combat = playerRedis.getCombat(playerId);
+
+        playerMapper.updatePlayer(player);
+        playerMapper.updateMainTask(mainTask);
+        playerMapper.updateCombat(combat);
     }
 
 }// end

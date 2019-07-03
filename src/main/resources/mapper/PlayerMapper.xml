@@ -57,8 +57,20 @@
         UPDATE player
         <trim prefix="SET" suffixOverrides=",">
             <if test="task!=null and task!=''">task = #{task},</if>
-            <if test="sub_task!=null and sub_task!=''">sub_task = #{sub_task},</if>
+            <if test="subTask!=null">sub_task = #{subTask},</if>
         </trim>
         WHERE id =#{id}
+    </update>
+
+    <!-- 更新玩家战斗信息-->
+    <update id="updateCombat" parameterType="combat">
+        UPDATE player
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="hp!=null">hp = #{hp},</if>
+            <if test="sp!=null">sp = #{sp},</if>
+            <if test="attack!=null">attack = #{attack},</if>
+            <if test="defense!=null">defense = #{defense},</if>
+        </trim>
+        where id = #{id}
     </update>
 </mapper>

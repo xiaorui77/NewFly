@@ -45,7 +45,7 @@ public class BattleService
     public String enterSingle(String playerId, String monsterId) {
         String status = battleRedis.getSingle(playerId, "status");
         if (status != null)
-            return "已经开始战斗!";
+            return playerId+":已经开始战斗!";
         // 初始化战斗信息
         Combat player = playerRedis.getCombat(playerId);
         Combat monster = battleRedis.getMonster(monsterId);

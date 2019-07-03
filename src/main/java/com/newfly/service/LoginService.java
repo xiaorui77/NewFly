@@ -1,7 +1,12 @@
 package com.newfly.service;
 
 
+import com.newfly.dao.PlayerRedis;
 import com.newfly.mapper.LoginMapper;
+import com.newfly.mapper.PlayerMapper;
+import com.newfly.pojo.Combat;
+import com.newfly.pojo.Player;
+import com.newfly.pojo.Task;
 import com.newfly.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +18,12 @@ public class LoginService
 {
     @Autowired
     LoginMapper loginMapper;
+
+    @Autowired
+    PlayerMapper playerMapper;
+
+    @Autowired
+    PlayerRedis playerRedis;
 
 
     // 用户登录验证, 成功返回playerId列表
@@ -37,13 +48,23 @@ public class LoginService
     }
 
     // 选择角色
-    public int selectCharacter(int userId, int charId) {
+    public Player selectCharacter(int userId, int charId) {
         // 选择角色
         List<Integer> list = loginMapper.queryPlayerIds(userId);
         if (!list.contains(charId))
-            return 0;
-        return charId;
+            return null;
+
+        // 获取选择的角色信息并保存到Redis
+        Player player = playerMapper.queryPlayer(charId);
+        Task task = playerMapper.queryTask(charId);
+        Combat combat = playerMapper.queryCombat(charId);
+        playerRedis.savePlayer(player);
+        playerRedis.saveMainTask(task);
+        playerRedis.setCombat(combat);
+
+        return player;
     }
+
 
     // 获取上次登录
     public int queryLastPlayer(int user) {
@@ -51,7 +72,7 @@ public class LoginService
     }
 
     // 更新上次登录
-    public void updateLaetPlayer(int userId, int playerId) {
+    public void updateLastPlayer(int userId, int playerId) {
         // 保存本次登录
         User user = new User();
         user.setId(userId);

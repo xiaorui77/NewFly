@@ -10,4 +10,10 @@
         FROM `task_info`
         GROUP BY task_id
     </select>
+
+    <!-- 查询怪物信息-->
+    <select id="queryMonster" resultType="combat">
+        select id, hp, attack, defense
+        from monster_info
+    </select>
 </mapper>

@@ -30,7 +30,7 @@ public class TaskService
 
 
     /*
-     * 出事话后执行
+     * 初始化后执行
      * 用来加载任务详情到redis
      * */
     @PostConstruct

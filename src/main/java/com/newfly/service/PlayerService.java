@@ -60,26 +60,10 @@ public class PlayerService
         playerMapper.updateMainTask(task);
     }
 
-    // 保存character信息到redis中
-    public void savePlayer(Player player, Task task) {
-        // 保存用户信息
-        playerRedis.savePlayer(player);
-
-        // 保存用户主线任务信息
-        playerRedis.saveMainTask(task);
-
-        // 保存世界和场景信息
-        String playerId = String.valueOf(player.getId());
-        String sceneId = String.valueOf(player.getScene());
-        sceneRedis.add(playerId, sceneId);
-    }
-
     // 从redis中移除角色信息
     public void removePlayer(String playerId) {
         playerRedis.removePlayer(playerId);
     }
-
-
 
 
 

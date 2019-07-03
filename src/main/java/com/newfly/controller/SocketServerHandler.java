@@ -18,12 +18,14 @@ public class SocketServerHandler extends SimpleChannelInboundHandler<Object>
     // 初始化时获取
     private static GameController gameController;
     private static LoginController loginController;
+    private static BattleController battleController;
 
 
     static {
         ApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
         gameController = (GameController) context.getBean("gameController");
         loginController = (LoginController) context.getBean("loginController");
+        battleController = (BattleController) context.getBean("battleController");
     }
 
     @Override
@@ -48,6 +50,8 @@ public class SocketServerHandler extends SimpleChannelInboundHandler<Object>
         // 判断用哪个controller处理
         if (type / 1000 == 3) {
             result = loginController.handle(ctx, msg);
+        } else if (type / 1000 == 6) {
+            result = battleController.handle(ctx, msg);
         } else {
             result = gameController.handle(ctx, msg);
         }

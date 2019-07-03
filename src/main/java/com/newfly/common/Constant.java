@@ -62,6 +62,13 @@ public class Constant
     private static final int BATTLE = 6000;
     public static final int BATTLE_SINGLE = BATTLE + 111;
     public static final int BATTLE_SINGLE_RETURN = BATTLE + 112;
+    // 技能选择
+    public static final int BATTLE_ABILITY_SELECT = BATTLE + 113;
+    public static final int BATTLE_ABILITY_SELECT_RETURN = BATTLE + 114;
+    // 状态变化
+    public static final int BATTLE_STATUS_CHANGE_RETURN = BATTLE + 116;
+    // 战斗结果
+    public static final int BATTLE_RESULT_RETURN = BATTLE + 118;
 
 
     // 7.物品,背包,市场 7000

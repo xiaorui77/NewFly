@@ -28,6 +28,13 @@
         where id = #{id}
     </select>
 
+    <!-- 查询玩家战斗信息-->
+    <select id="queryCombat" parameterType="int" resultType="combat">
+        select id, hp, attack, defense
+        from player
+        where id = #{id}
+    </select>
+
 
     <!-- 更新玩家数据-->
     <update id="updatePlayer" parameterType="player">

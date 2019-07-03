@@ -60,3 +60,5 @@
 * 主线任务列表 **main_task** (hash结构)
     field task+id
 
+* 怪物信息表 n个 **monster:id**
+

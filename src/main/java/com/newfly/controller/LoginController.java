@@ -104,22 +104,19 @@ public class LoginController
         String charId = strings[1];
 
         // 选择角色
-        int character = loginService.selectCharacter(Integer.parseInt(userId), Integer.parseInt(charId));
-        loginService.updateLaetPlayer(Integer.parseInt(userId), Integer.parseInt(charId));
+        Player character = loginService.selectCharacter(Integer.parseInt(userId), Integer.parseInt(charId));
+        if (character == null)
+            return null;
+        loginService.updateLastPlayer(Integer.parseInt(userId), Integer.parseInt(charId));
 
         // 保存SocketChannel
         SocketChannelMap.add(charId, (SocketChannel) ctx.channel());
 
-        // 获取选择的角色信息并保存到Redis
-        Player player = playerService.queryPlayer(character);
-        Task task = playerService.queryMainTask(character);
-        playerService.savePlayer(player, task);
-
         // 保存世界和场景信息
-        mapSceneService.addPlayer(charId, String.valueOf(player.getScene()));
+        mapSceneService.addPlayer(charId, String.valueOf(character.getScene()));
 
         // 数据返回
-        return new ResultMessage(Constant.MESSAGE_PLAYER_SELECT_RESULT, player.toResult());
+        return new ResultMessage(Constant.MESSAGE_PLAYER_SELECT_RESULT, character.toResult());
     }
 
     // 退出player 未实现

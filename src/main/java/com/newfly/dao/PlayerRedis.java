@@ -1,6 +1,7 @@
 package com.newfly.dao;
 
 
+import com.newfly.pojo.Combat;
 import com.newfly.pojo.Player;
 import com.newfly.pojo.Task;
 import org.springframework.stereotype.Repository;
@@ -92,6 +93,14 @@ public class PlayerRedis
         return exist;
     }
 
+    // 获取玩家name
+    public String getName(String playerId) {
+        Jedis jedis = jedisPool.getResource();
+        String name = jedis.hget("player:" + playerId, "name");
+        jedis.close();
+        return name;
+    }
+
 
     // 保存玩家主线任务进度
     public void saveMainTask(Task task) {
@@ -120,19 +129,6 @@ public class PlayerRedis
         jedis.close();
     }
 
-
-    // 是否是队长
-    public boolean isCaptain(String playerId) {
-        Jedis jedis = jedisPool.getResource();
-        // 是否有队伍
-        String teamId = jedis.hget("player:" + playerId, "team");
-        if (teamId == null)
-            return false;
-
-        // 获取该队伍的队长id并判断
-        String captainId = jedis.hget("team:" + teamId, "captainId");
-        return captainId.equals(playerId);
-    }
 
     // 获取玩家所在的场景
     public String getScene(String playerId) {
@@ -192,13 +188,40 @@ public class PlayerRedis
         return result;
     }
 
-
-    // 获取玩家name
-    public String getName(String playerId) {
+    // 是否是队长
+    public boolean isCaptain(String playerId) {
         Jedis jedis = jedisPool.getResource();
-        String name = jedis.hget("player:" + playerId, "name");
+        // 是否有队伍
+        String teamId = jedis.hget("player:" + playerId, "team");
+        if (teamId == null)
+            return false;
+
+        // 获取该队伍的队长id并判断
+        String captainId = jedis.hget("team:" + teamId, "captainId");
+        return captainId.equals(playerId);
+    }
+
+
+    // 获取玩家信息
+    public Combat getCombat(String playerId) {
+        Jedis jedis = jedisPool.getResource();
+        Combat combat = new Combat();
+        combat.setId(Integer.parseInt(playerId));
+        combat.setHp(Integer.parseInt(jedis.hget("player:" + playerId, "hp")));
+        combat.setAttack(Integer.parseInt(jedis.hget("player:" + playerId, "attack")));
+        combat.setDefense(Integer.parseInt(jedis.hget("player:" + playerId, "defense")));
         jedis.close();
-        return name;
+        return combat;
+    }
+
+    // 设置玩家信息
+    public void setCombat(Combat combat) {
+        Jedis jedis = jedisPool.getResource();
+        String playerId = String.valueOf(combat.getId());
+        jedis.hset("player:" + playerId, "hp", String.valueOf(combat.getHp()));
+        jedis.hset("player:" + playerId, "attack", String.valueOf(combat.getAttack()));
+        jedis.hset("player:" + playerId, "defense", String.valueOf(combat.getDefense()));
+        jedis.close();
     }
 
 }// end

@@ -23,6 +23,8 @@
         <typeAlias type="com.newfly.pojo.Task" alias="task"/>
         <typeAlias type="com.newfly.pojo.User" alias="user"/>
         <typeAlias type="com.newfly.pojo.Combat" alias="combat"/>
+        <typeAlias type="com.newfly.pojo.Item" alias="item"/>
+        <typeAlias type="com.newfly.pojo.Equipment" alias="equipment"/>
     </typeAliases>
 
 </configuration>

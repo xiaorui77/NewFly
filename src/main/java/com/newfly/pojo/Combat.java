@@ -15,13 +15,13 @@ public class Combat
     private String name;
 
     private int hp; // 血量
-    private int sp; // 怒气值
+    private int sp; // 蓝
 
     private int attack;    // 物攻
     private int defense;    // 护甲
 
     private int crit;   // 暴击
-    private int tou;    // 抗暴
+    private int tou;    // 坚韧
 
     private int hit;    // 命中
     private int agl;    // 躲闪

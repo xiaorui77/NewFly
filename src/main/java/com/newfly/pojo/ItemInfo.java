@@ -1,21 +1,15 @@
 package com.newfly.pojo;
 
-public class Goods
+public class ItemInfo
 {
-    private int id;
-    private int kind;       //0代表一般物品,1代表武器，2代表衣服
+    private int id;       // 物品种类
     private String name;
-    private int grade;       // 等级
-    private int price;       //物品价格
-    private String owner;    // 所有者id
+    private int grade;       // 限制使用等级
+    private int price;       // 物品价格
 
 
     public int getId() {
         return id;
-    }
-
-    public int getKind() {
-        return kind;
     }
 
     public String getName() {
@@ -30,16 +24,9 @@ public class Goods
         return price;
     }
 
-    public String getOwner() {
-        return owner;
-    }
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public void setKind(int kind) {
-        this.kind = kind;
     }
 
     public void setName(String name) {
@@ -54,7 +41,4 @@ public class Goods
         this.price = price;
     }
 
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
 }

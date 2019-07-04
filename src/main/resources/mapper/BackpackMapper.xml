@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.newfly.mapper.BackpackMapper">
+
+    <!-- 根据用户Id查询物品-->
+    <select id="queryItems" parameterType="int" resultType="item">
+        select id, name, kind, number as num, backpack_index
+        from item
+        where owner = #{playerId}
+    </select>
+
+    <!-- 根据用户Id查询未穿戴装备-->
+    <select id="queryEquipment" parameterType="int" resultType="equipment">
+        select id,
+               name,
+               kind,
+               backpack_index,
+               combat_power,
+               enhance_level,
+               bind,
+               value1,
+               value2,
+               value3
+        from equipment
+        where owner = #{playerId}
+          and backpack_index &gt; 0
+    </select>
+
+    <!-- 查询用户已经穿戴装备-->
+    <select id="queryWearing" parameterType="int" resultType="equipment">
+        select id,
+               name,
+               kind,
+               backpack_index,
+               combat_power,
+               enhance_level,
+               bind,
+               value1,
+               value2,
+               value3
+        from equipment
+        where owner = #{playerId}
+          and backpack_index &lt; 0
+    </select>
+
+
+    <!-- 添加物品-->
+
+</mapper>

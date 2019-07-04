@@ -16,8 +16,9 @@ import org.slf4j.LoggerFactory;
 public class NewFlyServer
 {
     private static final Logger logger = LoggerFactory.getLogger(NewFlyServer.class);
-    private static final String IP = "127.0.0.1";
-    //private static final String IP = "172.30.192.163";
+    //private static final String IP = "127.0.0.1";
+    private static final String IP = "172.30.192.163";
+    //private static final String IP = "172.18.12.67";
     private static final int PORT = 9600;
 
     // 分配用于处理业务的线程组数量

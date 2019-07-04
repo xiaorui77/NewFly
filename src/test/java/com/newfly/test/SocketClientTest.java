@@ -18,8 +18,8 @@ import java.io.InputStreamReader;
 public class SocketClientTest
 {
     private static final Logger logger = LoggerFactory.getLogger(SocketClientTest.class);
-    private static final String IP = "127.0.0.1";
-    //private static final String IP = "172.30.192.163";
+    //private static final String IP = "127.0.0.1";
+    private static final String IP = "172.30.192.163";
     private static final int PORT = 9600;
 
     private static EventLoopGroup group = new NioEventLoopGroup();

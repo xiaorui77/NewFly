@@ -21,12 +21,15 @@ public class GameController
 
     private final TaskService taskService;
 
-    public GameController(PlayerService playerService, ChatService chatPublic, MapSceneService mapService, TeamService teamService, TaskService taskService) {
+    private final BackpackService backpackService;
+
+    public GameController(PlayerService playerService, ChatService chatPublic, MapSceneService mapService, TeamService teamService, TaskService taskService, BackpackService backpackService) {
         this.playerService = playerService;
         this.chatPublic = chatPublic;
         this.mapService = mapService;
         this.teamService = teamService;
         this.taskService = taskService;
+        this.backpackService = backpackService;
     }
 
 
@@ -58,6 +61,11 @@ public class GameController
                 return taskService.change(msg);
             case Constant.MESSAGE_TASK_QUERY: // 查询任务
                 return taskService.checkTask(msg);
+
+            case Constant.BACKPACK_INFO:    // 背包信息
+                return backpackService.backpackInfo(msg);
+            case Constant.BACKPACK_ITEM:    // 背包物品
+                return backpackService.getBackpackItems(msg);
 
 
             default:

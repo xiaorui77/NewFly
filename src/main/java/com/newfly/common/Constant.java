@@ -72,6 +72,16 @@ public class Constant
 
 
     // 7.物品,背包,市场 7000
+    private static final int BACKPACK = 7000;
+    // 获取物品/装备详情
+    public static final int BACKPACK_ITEM_INFO = BACKPACK + 111;
+    public static final int BACKPACK_ITEM_INFO_RETURN = BACKPACK + 112;
+    // 查询背包信息
+    public static final int BACKPACK_INFO = BACKPACK + 211;
+    public static final int BACKPACK_INFO_RETURN = BACKPACK + 212;
+    // 获取背包/身上物品
+    public static final int BACKPACK_ITEM = BACKPACK + 213;
+    public static final int BACKPACK_ITEM_RETURN = BACKPACK + 214;
 
 
     // 8.任务 8000

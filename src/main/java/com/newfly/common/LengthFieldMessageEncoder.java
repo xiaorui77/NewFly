@@ -11,7 +11,7 @@ public class LengthFieldMessageEncoder extends MessageToByteEncoder<ResultMessag
 {
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, ResultMessage message, ByteBuf byteBuf) throws Exception {
-        if (message == null) {
+        if (message == null || message.getBody() == null) {
             throw new Exception("消息内容为空!");
         }
 

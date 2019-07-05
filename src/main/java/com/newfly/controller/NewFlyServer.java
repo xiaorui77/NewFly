@@ -45,7 +45,7 @@ public class NewFlyServer
                 pipeline.addLast(new SocketServerHandler());
             }
         });
-        bootstrap.bind(IP, PORT).sync();
+        bootstrap.bind(PORT).sync();
         logger.info("Socket服务器已启动完成");
     }
 

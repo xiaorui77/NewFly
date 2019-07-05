@@ -13,7 +13,7 @@ public class Equipment extends Item
     private int value3; // 属性三
 
 
-    public Equipment() {
+    Equipment() {
         super();
     }
 
@@ -21,21 +21,35 @@ public class Equipment extends Item
     public Equipment(String item) {
         String[] strings = item.split(":");
         id = Long.parseLong(strings[0]);
-        kind = Integer.parseInt(strings[1]);
-        backpackIndex = Integer.parseInt(strings[2]);
+        name = strings[1];
+        kind = Integer.parseInt(strings[2]);
+        backpackIndex = Integer.parseInt(strings[3]);
+        owner = Integer.parseInt(strings[4]);
 
-        combatPower = Integer.parseInt(strings[3]);
-        enhanceLevel = Short.parseShort(strings[4]);
-        bind = Short.parseShort(strings[5]);
-        value1 = Integer.parseInt(strings[6]);
-        value2 = Integer.parseInt(strings[7]);
-        value3 = Integer.parseInt(strings[8]);
+        combatPower = Integer.parseInt(strings[5]);
+        enhanceLevel = Short.parseShort(strings[6]);
+        bind = Short.parseShort(strings[7]);
+        value1 = Integer.parseInt(strings[8]);
+        value2 = Integer.parseInt(strings[9]);
+        value3 = Integer.parseInt(strings[10]);
     }
 
     // 转换为返回的结果
     @Override
     public String toResultContent() {
         return id + ":" + kind + ":" + backpackIndex + ":" + combatPower + ":" + enhanceLevel + ":" + bind + ":" + value1 + ":" + value2 + ":" + value3;
+    }
+
+    // 转换为返回的结果
+    @Override
+    public String toCommodityContent() {
+        return id + ":" + kind + ":" + backpackIndex + ":" + owner + ":" + combatPower + ":" + enhanceLevel + ":" + bind + ":" + value1 + ":" + value2 + ":" + value3;
+    }
+
+    // 转换为保存字符串
+    @Override
+    public String toSaveString() {
+        return id + ":" + name + ":" + kind + ":" + backpackIndex + ":" + owner + ":" + combatPower + ":" + enhanceLevel + ":" + bind + ":" + value1 + ":" + value3 + ":" + value3;
     }
 
 

@@ -58,7 +58,7 @@ public class TaskService
         Task task = playerRedis.getMainTask(playerId);
         if (task.changeTask(taskId, subTaskId)) {
             // 保存到数据库并返回
-            playerRedis.changeMainTask(playerId, taskId, subTaskId);
+            playerRedis.setMainTask(playerId, taskId, subTaskId);
             return new ResultMessage(Constant.MESSAGE_TASK_CHANGE_RETURN, msg.getBody());
         }
         return null;

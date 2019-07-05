@@ -23,4 +23,7 @@ public interface PlayerMapper
 
     // 更新玩家战斗信息
     void updateCombat(Combat combat);
+
+    // 玩家增加金币
+    void increaseMoney(Player player);
 }

@@ -63,14 +63,135 @@ public class GameController
                 return taskService.checkTask(msg);
 
             case Constant.BACKPACK_INFO:    // 背包信息
-                return backpackService.backpackInfo(msg);
+                return backpackInfo(msg);
             case Constant.BACKPACK_ITEM:    // 背包物品
-                return backpackService.getBackpackItems(msg);
+                return getBackpackItems(msg);
 
+            case Constant.MARKET_LIST:  // 市场列表
+                return getMarket(msg);
+            case Constant.MARKET_PUT:   // 将物品放到市场
+                return putMarket(msg);
+            case Constant.MARKET_DOWN:  // 下架商品
+                return downMarket(msg);
+            case Constant.MARKET_BUG:   // 购买物品
+                return bugMarket(msg);
 
             default:
                 return null;
         }
+    }
+
+
+    /*
+     * 7.物品,背包,市场 7000
+     *
+     * */
+    // 获取物品信息
+    public ResultMessage getItem(ResultMessage msg) {
+        // 分离数据
+        String[] strings = msg.getBody().split(":");
+        String playerId = strings[0];
+        String itemId = strings[1];
+
+        String result = backpackService.getItem(playerId, itemId);
+        if (result == null)
+            return null;
+        return new ResultMessage(Constant.BACKPACK_ITEM_INFO_RETURN, result);
+    }
+
+    // 使用物品
+    public ResultMessage useItem(ResultMessage msg) {
+        // 分离数据
+        String[] strings = msg.getBody().split(":");
+        String playerId = strings[0];
+        String itemId = strings[1];
+        String num = strings[2];
+
+        String result = backpackService.useItem(playerId, itemId, Integer.parseInt(num));
+        if (result == null)
+            return null;
+        return new ResultMessage(Constant.BACKPACK_ITEM_USE_RETURN, result);
+    }
+
+    // 穿戴/脱下装备
+    public ResultMessage wearEquipment(ResultMessage msg) {
+        // 分离数据
+        String[] strings = msg.getBody().split(":");
+        String playerId = strings[0];
+        String equipmentId = strings[1];
+        String position = strings[2];
+
+        String result = backpackService.wearEquipment(playerId, equipmentId, Integer.parseInt(position));
+        if (result == null)
+            return null;
+        return new ResultMessage(Constant.BACKPACK_EQUIPMENT_WEAR_RETURN, result);
+    }
+
+
+    // 获取背包信息
+    private ResultMessage backpackInfo(ResultMessage msg) {
+        // 分离数据
+        String[] strings = msg.getBody().split(":");
+        String playerId = strings[0];
+
+        return new ResultMessage(Constant.BACKPACK_INFO_RETURN, backpackService.backpackInfo(playerId));
+    }
+
+    // 获取背包物品
+    private ResultMessage getBackpackItems(ResultMessage msg) {
+        // 分离数据
+        String[] strings = msg.getBody().split(":");
+        String playerId = strings[0];
+        String method = strings[1];
+
+        backpackService.getBackpackItems(playerId, method);
+        return null;
+    }
+
+
+    // 获取市场列表
+    private ResultMessage getMarket(ResultMessage msg) {
+        // 分离数据
+        String[] strings = msg.getBody().split(":");
+        String playerId = strings[0];
+        String method = strings[1];
+
+        backpackService.getMarket(playerId, method);
+        return null;
+    }
+
+    // 放到市场
+    private ResultMessage putMarket(ResultMessage msg) {
+        // 分离数据
+        String[] strings = msg.getBody().split(":");
+        String playerId = strings[0];
+        String itemId = strings[1];
+        String price = strings[2];
+
+        backpackService.putMarket(playerId, itemId, Integer.parseInt(price));
+        return null;
+    }
+
+    // 下架市场
+    private ResultMessage downMarket(ResultMessage msg) {
+        // 分离数据
+        String[] strings = msg.getBody().split(":");
+        String playerId = strings[0];
+        String commodityId = strings[1];
+
+        backpackService.downMarket(playerId, commodityId);
+        return null;
+    }
+
+    // 市场购买物品
+    private ResultMessage bugMarket(ResultMessage msg) {
+        // 分离数据
+        String[] strings = msg.getBody().split(":");
+        String playerId = strings[0];
+        String commodityId = strings[1];
+
+        backpackService.bugMarket(playerId, commodityId);
+        return null;
     }
 
 }// end

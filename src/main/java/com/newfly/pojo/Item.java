@@ -2,32 +2,43 @@ package com.newfly.pojo;
 
 public class Item
 {
-    long id;
+    protected long id;
     protected String name;  // 暂时没有这个功能
     int kind;   // 种类
-    int backpackIndex;    // 背包位置
+    int backpackIndex;    // 背包位置, 市场的时候当总价
+    int owner;  // 所属玩家
 
     private int num;    // 数量
-    int price;  // 价格
-    private int owner;  // 所属玩家
 
 
-    public Item() {
+    Item() {
     }
 
     // 通过字符串构造
     public Item(String item) {
         String[] strings = item.split(":");
         id = Long.parseLong(strings[0]);
-        kind = Integer.parseInt(strings[1]);
-        backpackIndex = Integer.parseInt(strings[2]);
-        num = Integer.parseInt(strings[3]);
+        name = strings[1];
+        kind = Integer.parseInt(strings[2]);
+        backpackIndex = Integer.parseInt(strings[3]);
+        owner = Integer.parseInt(strings[4]);
+        num = Integer.parseInt(strings[5]);
     }
 
 
-    // 转换为返回结果
+    // 转换为返回结果字符串
     public String toResultContent() {
         return id + ":" + kind + ":" + backpackIndex + ":" + num;
+    }
+
+    // 转为市场结果字符串
+    public String toCommodityContent() {
+        return id + ":" + kind + ":" + backpackIndex + ":" + owner + ":" + num;
+    }
+
+    // 转换为保存字符串
+    public String toSaveString() {
+        return id + ":" + name + ":" + kind + ":" + backpackIndex + ":" + owner + ":" + num;
     }
 
 
@@ -69,14 +80,6 @@ public class Item
 
     public void setBackpackIndex(int backpackIndex) {
         this.backpackIndex = backpackIndex;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
     }
 
     public int getOwner() {

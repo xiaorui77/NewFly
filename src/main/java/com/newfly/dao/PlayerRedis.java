@@ -25,15 +25,15 @@ public class PlayerRedis
     public void savePlayer(Player player) {
         Jedis jedis = jedisPool.getResource();
         String strID = "player:" + player.getId();
-        jedis.hset(strID, "id", String.valueOf(player.getId()));
-        jedis.hset(strID, "name", player.getName());
-        jedis.hset(strID, "profession", String.valueOf(player.getProfession()));
-        jedis.hset(strID, "grade", String.valueOf(player.getGrade()));
-        jedis.hset(strID, "scene", String.valueOf(player.getScene()));
-        jedis.hset(strID, "exp", String.valueOf(player.getExp()));
-        jedis.hset(strID, "money", String.valueOf(player.getMoney()));
-        jedis.hset(strID, "x", String.valueOf(player.getX()));
-        jedis.hset(strID, "y", String.valueOf(player.getY()));
+        jedis.hset(strID, "id", player.getStrId());
+        jedis.hsetnx(strID, "name", player.getName());
+        jedis.hsetnx(strID, "profession", String.valueOf(player.getProfession()));
+        jedis.hsetnx(strID, "grade", String.valueOf(player.getGrade()));
+        jedis.hsetnx(strID, "scene", String.valueOf(player.getScene()));
+        jedis.hsetnx(strID, "exp", String.valueOf(player.getExp()));
+        jedis.hsetnx(strID, "money", String.valueOf(player.getMoney()));
+        jedis.hsetnx(strID, "x", String.valueOf(player.getX()));
+        jedis.hsetnx(strID, "y", String.valueOf(player.getY()));
         jedis.close();
     }
 
@@ -58,6 +58,10 @@ public class PlayerRedis
     public Player getPlayer(String playerId) {
         Jedis jedis = jedisPool.getResource();
         String strId = "player:" + playerId;
+        if (!jedis.exists(strId)) {
+            jedis.close();
+            return null;
+        }
         Player player = new Player();
         player.setId(Integer.parseInt(jedis.hget(strId, "id")));
         player.setName(jedis.hget(strId, "name"));
@@ -121,7 +125,7 @@ public class PlayerRedis
     }
 
     // 更新玩家主线任务进度
-    public void changeMainTask(String playerId, String task, String subTask) {
+    public void setMainTask(String playerId, String task, String subTask) {
         Jedis jedis = jedisPool.getResource();
         jedis.hset("player:" + playerId, "task", task);
         jedis.hset("player:" + playerId, "sub_task", subTask);
@@ -220,6 +224,13 @@ public class PlayerRedis
         jedis.hset("player:" + playerId, "hp", String.valueOf(combat.getHp()));
         jedis.hset("player:" + playerId, "attack", String.valueOf(combat.getAttack()));
         jedis.hset("player:" + playerId, "defense", String.valueOf(combat.getDefense()));
+        jedis.close();
+    }
+
+    // 设置玩家金钱
+    public void setMoney(String playerId, int money) {
+        Jedis jedis = jedisPool.getResource();
+        jedis.hset("player:" + playerId, "money", String.valueOf(money));
         jedis.close();
     }
 

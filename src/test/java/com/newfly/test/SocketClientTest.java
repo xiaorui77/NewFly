@@ -18,8 +18,8 @@ import java.io.InputStreamReader;
 public class SocketClientTest
 {
     private static final Logger logger = LoggerFactory.getLogger(SocketClientTest.class);
-    //private static final String IP = "127.0.0.1";
-    private static final String IP = "172.30.192.163";
+    private static final String IP = "127.0.0.1";
+    //private static final String IP = "172.30.192.163";
     //private static final String IP = "172.18.12.67";
     private static final int PORT = 9600;
 
@@ -61,7 +61,7 @@ public class SocketClientTest
             m = br.readLine();
             ResultMessage msg = new ResultMessage(0, type, m);
             channelFuture.channel().writeAndFlush(msg);
-            logger.info("已向Socket服务器发送数据:" + msg);
+            logger.info("已发送数据:" + msg.getType() + "=>" + msg.getBody());
         }
         channelFuture.channel().closeFuture().sync();
 

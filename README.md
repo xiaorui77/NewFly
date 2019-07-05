@@ -67,10 +67,11 @@
 * 主线任务列表 **main_task** (hash结构)
     field task+id
 
-* 战斗列表 n个 **battle_single:id**  保存一个战斗信息
-* 怪物信息表 n个 **monster:id**
+* 战斗列表 n个 (hash结构) **battle_single:id**  保存每场战斗信息
+* 怪物信息表 n个 (hash结构) **monster:id**
 
-
+* 玩家物品表 n个 (hash结构) **item:playerId** 保存玩家物品信息
+* 市场物品表 (hash结构) **item:market**
 
 
 
@@ -92,8 +93,8 @@
 
 
 
-装备种类
-  XX XX XXXX
+装备kind
+  XX X XX
 职业 位置 
 
 物品ID生成 

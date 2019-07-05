@@ -73,4 +73,11 @@
         </trim>
         where id = #{id}
     </update>
+
+    <!-- 玩家获得金币-->
+    <update id="increaseMoney" parameterType="player">
+        update player
+        set money = money + #{money}
+        where id = #{id}
+    </update>
 </mapper>

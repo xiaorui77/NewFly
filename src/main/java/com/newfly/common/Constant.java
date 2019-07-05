@@ -27,6 +27,8 @@ public class Constant
     public static final int MESSAGE_PLAYER_INFO = PLAYER + 213;
     public static final int MESSAGE_PLAYER_INFO_RETURN = PLAYER + 214;
 
+    public static final int PLAYER_GRADE_MONEY = PLAYER + 311;
+    public static final int PLAYER_GRADE_MONEY_RETURN = PLAYER + 311;
 
     // 4.聊天,队伍等 4000
     private static final int MESSAGE_CHAT = 4000;
@@ -83,7 +85,7 @@ public class Constant
     public static final int BACKPACK_EQUIPMENT_WEAR = BACKPACK + 115;
     public static final int BACKPACK_EQUIPMENT_WEAR_RETURN = BACKPACK + 116;
     // 物品变化
-    public static final int BACKPACK_ITEM_CHANGE_RETURN = BACKPACK + 116;
+    public static final int BACKPACK_ITEM_CHANGE_RETURN = BACKPACK + 118;
 
     // 查询背包信息
     public static final int BACKPACK_INFO = BACKPACK + 211;
@@ -91,6 +93,22 @@ public class Constant
     // 获取背包/身上物品
     public static final int BACKPACK_ITEM = BACKPACK + 213;
     public static final int BACKPACK_ITEM_RETURN = BACKPACK + 214;
+
+    // 获取市场列表
+    public static final int MARKET_LIST = BACKPACK + 311;
+    public static final int MARKET_LIST_RETURN = BACKPACK + 312;
+    // 放到市场
+    public static final int MARKET_PUT = BACKPACK + 313;
+    // 市场变化
+    public static final int MARKET_CHANGE_RETURN = BACKPACK + 314;
+    // 下架物品
+    public static final int MARKET_DOWN = BACKPACK + 315;
+    // 商城减少
+    public static final int MARKET_REDUCE = BACKPACK + 316;
+    // 购买商品
+    public static final int MARKET_BUG = BACKPACK + 317;
+    // 购买成功返回
+    public static final int MARKET_BUG_RETURN = BACKPACK + 318;
 
 
     // 8.任务 8000

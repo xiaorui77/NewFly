@@ -16,4 +16,5 @@
         select id, hp, attack, defense
         from monster_info
     </select>
+
 </mapper>

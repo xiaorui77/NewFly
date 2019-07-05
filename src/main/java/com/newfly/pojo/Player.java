@@ -18,8 +18,23 @@ public class Player
     }
 
 
+    // 转为返回字符串
+    public String toResult() {
+        return id + ":" + name + ":" + profession + ":" + grade + ":" + exp + ":" + money + ":" + scene + ":" + x + ":" + y;
+    }
+
+    // 转为返回等级经验金币
+    public String toExpMoney() {
+        return id + ":" + grade + ":" + exp + ":" + money;
+    }
+
+
     public int getId() {
         return id;
+    }
+
+    public String getStrId() {
+        return String.valueOf(id);
     }
 
     public String getName() {
@@ -91,6 +106,10 @@ public class Player
         this.money = money;
     }
 
+    public void changeMoney(int money) {
+        this.money += money;
+    }
+
     public void setScene(int scene) {
         this.scene = scene;
     }
@@ -107,9 +126,4 @@ public class Player
         this.createTime = createTime;
     }
 
-
-    // 转为字符串类型
-    public String toResult() {
-        return id + ":" + name + ":" + profession + ":" + grade + ":" + exp + ":" + money + ":" + scene + ":" + x + ":" + y;
-    }
-}
+}// end

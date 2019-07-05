@@ -15,7 +15,7 @@ public class GameClientEncoder extends MessageToByteEncoder<ResultMessage>
 
     @Override
     protected void encode(ChannelHandlerContext ctx, ResultMessage msg, ByteBuf out) throws Exception {
-        if (msg == null)
+        if (msg == null || msg.getBody() == null)
             return;
         logger.info("发送" + msg.getType() + "类型的数据=>" + msg.getBody());
         String message = msg.getType() + ":" + msg.getBody() + ":";

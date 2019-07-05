@@ -76,6 +76,15 @@ public class Constant
     // 获取物品/装备详情
     public static final int BACKPACK_ITEM_INFO = BACKPACK + 111;
     public static final int BACKPACK_ITEM_INFO_RETURN = BACKPACK + 112;
+    // 使用物品
+    public static final int BACKPACK_ITEM_USE = BACKPACK + 113;
+    public static final int BACKPACK_ITEM_USE_RETURN = BACKPACK + 114;
+    // 穿戴/脱下装备
+    public static final int BACKPACK_EQUIPMENT_WEAR = BACKPACK + 115;
+    public static final int BACKPACK_EQUIPMENT_WEAR_RETURN = BACKPACK + 116;
+    // 物品变化
+    public static final int BACKPACK_ITEM_CHANGE_RETURN = BACKPACK + 116;
+
     // 查询背包信息
     public static final int BACKPACK_INFO = BACKPACK + 211;
     public static final int BACKPACK_INFO_RETURN = BACKPACK + 212;

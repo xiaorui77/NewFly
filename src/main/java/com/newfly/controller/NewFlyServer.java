@@ -21,11 +21,9 @@ public class NewFlyServer
     //private static final String IP = "172.18.12.67";
     private static final int PORT = 9600;
 
-    // 分配用于处理业务的线程组数量
+    // 线程组数量
     private static final int BIS_GROUP_SIZE = Runtime.getRuntime().availableProcessors() * 2;
-
-    // 每个线程组中线程的数量
-    private static final int WORK_GROUP_SIZE = 4;
+    private static final int WORK_GROUP_SIZE = 1;
 
     private static EventLoopGroup bossGroup = new NioEventLoopGroup(1);
     private static EventLoopGroup workerGroup = new NioEventLoopGroup(WORK_GROUP_SIZE);
@@ -57,8 +55,7 @@ public class NewFlyServer
     }
 
     public static void main(String[] args) throws Exception {
-        logger.info("开始启动Socket服务器...");
-        logger.info("监听IP:" + IP + " Port=" + PORT);
+        logger.info("开始启动,监听地址:" + IP + " 端口:" + PORT);
         new NewFlyServer().run();
     }
 

@@ -18,7 +18,7 @@ public class GameClientEncoder extends MessageToByteEncoder<ResultMessage>
         if (msg == null)
             return;
         logger.info("发送" + msg.getType() + "类型的数据=>" + msg.getBody());
-        String message = msg.getType() + ":" + msg.getBody();
+        String message = msg.getType() + ":" + msg.getBody() + ":";
         byte[] bytes = message.getBytes(CharsetUtil.UTF_8);
         out.writeBytes(bytes);
     }

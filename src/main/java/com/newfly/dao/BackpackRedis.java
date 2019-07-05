@@ -90,4 +90,13 @@ public class BackpackRedis
         return items;
     }
 
+    // 保存所有到redis
+    public void setCarryAll(String playerId, List<Item> items) {
+        Jedis jedis = jedisPool.getResource();
+        for (Item item : items) {
+            jedis.sadd("item:" + playerId, item.toResultContent());
+        }
+        jedis.close();
+    }
+
 }// end

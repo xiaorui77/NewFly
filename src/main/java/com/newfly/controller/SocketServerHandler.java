@@ -28,14 +28,27 @@ public class SocketServerHandler extends SimpleChannelInboundHandler<Object>
         battleController = (BattleController) context.getBean("battleController");
     }
 
+
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable throwable) {
-        logger.debug("异常发生: 捕获于SocketServerHandler:exceptionCaught()", throwable);
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        logger.info("与新的客户端建立连接");
+        super.channelActive(ctx);
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        super.channelRead(ctx, msg);
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        logger.info("与客户端连接断开");
+
+        // 异常退出
+        loginController.close(ctx);
+        SocketChannelMap.remove((SocketChannel) ctx.channel()); // 删除channel
+        super.channelInactive(ctx);
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable throwable) {
+        logger.debug("连接异常: 客户端错误的断开了连接");
+        ctx.close();
     }
 
     @Override
@@ -60,19 +73,4 @@ public class SocketServerHandler extends SimpleChannelInboundHandler<Object>
             ctx.writeAndFlush(result);
     }
 
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        logger.info("与新的客户端建立连接");
-        super.channelActive(ctx);
-    }
-
-    @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        logger.info("与客户端连接断开");
-
-        // 异常退出
-        loginController.close(ctx);
-        SocketChannelMap.remove((SocketChannel) ctx.channel()); // 删除channel
-        super.channelInactive(ctx);
-    }
-}
+}// end

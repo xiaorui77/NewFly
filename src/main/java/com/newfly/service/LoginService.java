@@ -1,13 +1,12 @@
 package com.newfly.service;
 
 
+import com.newfly.dao.BackpackRedis;
 import com.newfly.dao.PlayerRedis;
+import com.newfly.mapper.BackpackMapper;
 import com.newfly.mapper.LoginMapper;
 import com.newfly.mapper.PlayerMapper;
-import com.newfly.pojo.Combat;
-import com.newfly.pojo.Player;
-import com.newfly.pojo.Task;
-import com.newfly.pojo.User;
+import com.newfly.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +23,12 @@ public class LoginService
 
     @Autowired
     PlayerRedis playerRedis;
+
+    @Autowired
+    BackpackMapper backpackMapper;
+
+    @Autowired
+    BackpackRedis backpackRedis;
 
 
     // 用户登录验证, 成功返回playerId列表
@@ -61,6 +66,10 @@ public class LoginService
         playerRedis.savePlayer(player);
         playerRedis.saveMainTask(task);
         playerRedis.setCombat(combat);
+        List<Item> items = backpackMapper.queryItems(charId);
+        items.addAll(backpackMapper.queryEquipment(charId));
+        items.addAll(backpackMapper.queryWearing(charId));
+        backpackRedis.setCarryAll(String.valueOf(charId), items);
 
         return player;
     }

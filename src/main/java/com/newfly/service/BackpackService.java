@@ -14,7 +14,7 @@ import java.util.List;
 
 
 /*
- * 背包业务系统
+ * 背包,市场业务系统
  * */
 @Controller
 public class BackpackService
@@ -24,6 +24,24 @@ public class BackpackService
 
     @Autowired
     BackpackRedis backpackRedis;
+
+
+    static Item generateItem(int kind, int num) {
+        return null;
+    }
+
+
+    // 使用物品
+    public ResultMessage useItem(ResultMessage msg) {
+
+        return null;
+    }
+
+    // 穿戴/脱下装备
+    public ResultMessage wearEquipment(ResultMessage msg) {
+        return null;
+    }
+
 
     // 获取背包信息
     public ResultMessage backpackInfo(ResultMessage msg) {
@@ -78,7 +96,19 @@ public class BackpackService
     }
 
 
-    // 查询玩家背包信息到redis
+    // 市场
+
+
+    // 查询玩家物品到redis
+    public void queryToRedis(String playerId) {
+        // 从数据库中查询所有
+        List<Item> items = backpackMapper.queryItems(Integer.parseInt(playerId));
+        items.addAll(backpackMapper.queryWearing(Integer.parseInt(playerId)));
+        items.addAll(backpackMapper.queryEquipment(Integer.parseInt(playerId)));
+
+        // 保存到redis
+        backpackRedis.setCarryAll(playerId, items);
+    }
 
 
 }// end

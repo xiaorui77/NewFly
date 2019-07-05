@@ -6,7 +6,7 @@
 
     <!-- 根据用户Id查询物品-->
     <select id="queryItems" parameterType="int" resultType="item">
-        select id, name, kind, number as num, backpack_index
+        select id, name, kind, backpack_index, number as num
         from item
         where owner = #{playerId}
     </select>

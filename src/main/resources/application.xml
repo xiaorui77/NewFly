@@ -14,6 +14,12 @@
         <constructor-arg name="port" value="6379"/>
     </bean>
 
+    <bean id="syncMQ" class="com.newfly.util.SyncMQ">
+        <constructor-arg name="chatService" ref="chatService"/>
+        <constructor-arg name="backpackMapper" ref="backpackMapper"/>
+        <constructor-arg name="pool" ref="jedisPool"/>
+    </bean>
+
 
     <!-- 数据源-->
     <context:property-placeholder location="classpath:db.properties"/>

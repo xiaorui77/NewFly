@@ -15,4 +15,16 @@ public interface BackpackMapper
     // 查询用户已经穿戴装备
     List<Item> queryWearing(int playerId);
 
+
+    void updateItem(Item item);
+
+    void updateEquipment(Item item);
+
+    void deleteItem(String itemId);
+
+    void deleteEquipment(String itemId);
+
+    void insertItem(Item item);
+
+    void insertEquipment(Item item);
 }

@@ -13,9 +13,9 @@ public class GameController
 
     private final PlayerService playerService;
 
-    private final ChatService chatPublic;
+    private final ChatService chatService;
 
-    private final MapSceneService mapService;
+    private final SceneService mapService;
 
     private final TeamService teamService;
 
@@ -23,9 +23,9 @@ public class GameController
 
     private final BackpackService backpackService;
 
-    public GameController(PlayerService playerService, ChatService chatPublic, MapSceneService mapService, TeamService teamService, TaskService taskService, BackpackService backpackService) {
+    public GameController(PlayerService playerService, ChatService chatService, SceneService mapService, TeamService teamService, TaskService taskService, BackpackService backpackService) {
         this.playerService = playerService;
-        this.chatPublic = chatPublic;
+        this.chatService = chatService;
         this.mapService = mapService;
         this.teamService = teamService;
         this.taskService = taskService;
@@ -41,9 +41,9 @@ public class GameController
                 return playerService.queryPlayer(msg);
 
             case Constant.MESSAGE_CHAT_PUBLIC: // 公共频道聊天
-                return chatPublic.chatPublic(msg);
+                return chatPublic(msg);
             case Constant.MESSAGE_CHAT_PRIVATE: // 好友聊天
-                return chatPublic.chat(msg);
+                return chatFriend(msg);
 
             case Constant.MESSAGE_TEAM_CREATE: // 创建队伍
                 return teamService.createTeam(msg);
@@ -61,6 +61,14 @@ public class GameController
                 return taskService.change(msg);
             case Constant.MESSAGE_TASK_QUERY: // 查询任务
                 return taskService.checkTask(msg);
+
+
+            case Constant.BACKPACK_ITEM_INFO:   // 物品信息
+                return getItem(msg);
+            case Constant.BACKPACK_ITEM_USE:    // 使用物品
+                return useItem(msg);
+            case Constant.BACKPACK_EQUIPMENT_WEAR:  // 穿戴装备
+                return wearEquipment(msg);
 
             case Constant.BACKPACK_INFO:    // 背包信息
                 return backpackInfo(msg);
@@ -82,12 +90,34 @@ public class GameController
     }
 
 
-    /*
-     * 7.物品,背包,市场 7000
+    /* 4.聊天,队伍,家族 4000
+     *
+     * */
+    // 好友聊天
+    private ResultMessage chatFriend(ResultMessage msg) {
+        // 分离数据
+        String[] strings = msg.getBody().split(":");
+        String playerId = strings[0];
+        String targetId = strings[1];
+        String message = strings[2];
+
+        chatService.chat(playerId, targetId, message);
+        return null;
+    }
+
+    // 大厅聊天
+    private ResultMessage chatPublic(ResultMessage msg) {
+        // 添加到消息队列
+        chatService.addMQ(msg.getBody());
+        return null;
+    }
+
+
+    /* 7.物品,背包,市场 7000
      *
      * */
     // 获取物品信息
-    public ResultMessage getItem(ResultMessage msg) {
+    private ResultMessage getItem(ResultMessage msg) {
         // 分离数据
         String[] strings = msg.getBody().split(":");
         String playerId = strings[0];
@@ -100,7 +130,7 @@ public class GameController
     }
 
     // 使用物品
-    public ResultMessage useItem(ResultMessage msg) {
+    private ResultMessage useItem(ResultMessage msg) {
         // 分离数据
         String[] strings = msg.getBody().split(":");
         String playerId = strings[0];
@@ -114,7 +144,7 @@ public class GameController
     }
 
     // 穿戴/脱下装备
-    public ResultMessage wearEquipment(ResultMessage msg) {
+    private ResultMessage wearEquipment(ResultMessage msg) {
         // 分离数据
         String[] strings = msg.getBody().split(":");
         String playerId = strings[0];

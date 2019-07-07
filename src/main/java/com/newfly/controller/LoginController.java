@@ -7,8 +7,8 @@ import com.newfly.pojo.Player;
 import com.newfly.pojo.ResultMessage;
 import com.newfly.pojo.User;
 import com.newfly.service.LoginService;
-import com.newfly.service.MapSceneService;
 import com.newfly.service.PlayerService;
+import com.newfly.service.SceneService;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.SocketChannel;
 import org.slf4j.Logger;
@@ -32,7 +32,7 @@ public class LoginController
 
 
     @Autowired
-    MapSceneService mapSceneService;
+    SceneService sceneService;
 
 
     // 请求转发
@@ -116,7 +116,7 @@ public class LoginController
         SocketChannelMap.add(charId, (SocketChannel) ctx.channel());
 
         // 保存世界和场景信息
-        mapSceneService.addPlayer(charId, String.valueOf(character.getScene()));
+        sceneService.addPlayer(charId, String.valueOf(character.getScene()));
 
         logger.info("用户:" + character.getName() + "(id:" + charId + ")已经登录!");
 
@@ -138,7 +138,7 @@ public class LoginController
 
 
         // 退出世界场景
-        mapSceneService.removePlayer(playerId);
+        sceneService.removePlayer(playerId);
 
         // 从redis中移除相关字段
         playerService.removePlayer(playerId);

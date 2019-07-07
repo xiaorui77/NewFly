@@ -11,6 +11,8 @@ import com.newfly.pojo.ResultMessage;
 import io.netty.channel.Channel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import java.util.Set;
 
@@ -39,14 +41,20 @@ public class ChatService
     @Autowired
     TeamRedis teamRedis;
 
+    @Autowired
+    JedisPool jedisPool;
+
+
+    // 添加到消息队列
+    public void addMQ(String message) {
+        Jedis jedis = jedisPool.getResource();
+        jedis.rpush("chat_public",message);
+        jedis.close();
+    }
+
 
     // 广播聊天
-    public ResultMessage chatPublic(ResultMessage msg) {
-        String[] strings = msg.getBody().split(":");
-        String playerId = strings[0];
-        String channelId = strings[1];
-        String message = strings[2];
-
+    public void chatPublic(String playerId, String channelId, String message) {
         Set<String> players = null;
         // 查找频道的玩家列表
         switch (Integer.parseInt(channelId)) {
@@ -70,7 +78,7 @@ public class ChatService
         }
 
         if (players == null)
-            return null;
+            return;
         // 发送者的name
         String sendName = playerRedis.getName(playerId);
         // 给其他所有人广播
@@ -79,15 +87,11 @@ public class ChatService
             String content = channelId + ":" + playerId + ":" + sendName + ":" + message;
             SocketChannelMap.sendTo(curId, Constant.MESSAGE_CHAT_PUBLIC_RETURN, content);
         }
-        return null;
+        return;
     }
 
     // 好友聊天
-    public ResultMessage chat(ResultMessage msg) {
-        String[] strings = msg.getBody().split(":");
-        String playerId = strings[0];
-        String targetId = strings[1];
-        String message = strings[2];
+    public ResultMessage chat(String playerId, String targetId, String message) {
 
         // 找到目标玩家的channel
         Channel channel = SocketChannelMap.get(targetId);

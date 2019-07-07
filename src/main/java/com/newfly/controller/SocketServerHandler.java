@@ -2,30 +2,28 @@ package com.newfly.controller;
 
 import com.newfly.common.SocketChannelMap;
 import com.newfly.pojo.ResultMessage;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.SocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 
-
+@Component
+@ChannelHandler.Sharable
 public class SocketServerHandler extends SimpleChannelInboundHandler<Object>
 {
     private static final Logger logger = LoggerFactory.getLogger(NewFlyServer.class);
 
-    // 初始化时获取
-    private static GameController gameController;
-    private static LoginController loginController;
-    private static BattleController battleController;
+    private final GameController gameController;
+    private final LoginController loginController;
+    private final BattleController battleController;
 
-
-    static {
-        ApplicationContext context = new ClassPathXmlApplicationContext("application.xml");
-        gameController = (GameController) context.getBean("gameController");
-        loginController = (LoginController) context.getBean("loginController");
-        battleController = (BattleController) context.getBean("battleController");
+    public SocketServerHandler(GameController gameController, LoginController loginController, BattleController battleController) {
+        this.gameController = gameController;
+        this.loginController = loginController;
+        this.battleController = battleController;
     }
 
 

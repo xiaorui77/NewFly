@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-public class MapSceneService
+public class SceneService
 {
     @Autowired
     PlayerRedis playerRedis;
